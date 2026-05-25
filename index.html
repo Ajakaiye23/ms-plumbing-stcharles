@@ -22,7 +22,7 @@
   --border2:rgba(212,86,10,0.3);
 }
 html{scroll-behavior:smooth}
-body{cursor:none;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden;cursor:default}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden}
 
 /* GRID TEXTURE */
 body::before{
@@ -323,11 +323,44 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   .hours-panel,.contact-panel{padding:4rem 1.5rem}
   footer{padding:1.5rem}
 }
-.cur{position:fixed;width:8px;height:8px;background:currentColor;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s}.cur-ring{position:fixed;width:32px;height:32px;border:1.5px solid currentColor;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .15s ease;opacity:.5}
+
+/* SCROLL PROGRESS */
+.scroll-bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1100;transition:width .12s linear}
+
+/* SPLIT TEXT */
+.split-line{display:block;overflow:hidden;line-height:1.05}
+.split-char{display:inline-block;will-change:transform,opacity;transform:translateY(110%);opacity:0;transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .8s ease}
+.split-char.in{transform:translateY(0);opacity:1}
+.split-word{display:inline-block;white-space:nowrap}
+
+/* MAGNETIC */
+.magnetic{transition:transform .3s cubic-bezier(.2,.7,.3,1)}
+.magnetic-inner{display:inline-block;transition:transform .3s cubic-bezier(.2,.7,.3,1);pointer-events:none}
+
+/* HERO CANVAS */
+#heroCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.7}
+.hero>*:not(#heroCanvas){position:relative;z-index:2}
+
+/* BOOKING FORM */
+.booking-section{background:var(--bg2);padding:8rem 3rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.booking-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start}
+.booking-side p{font-size:.95rem;color:var(--muted);line-height:1.85;font-weight:300;margin-bottom:2rem;max-width:380px}
+.booking-side a{color:var(--accent);text-decoration:none;font-weight:600}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;margin-bottom:1.1rem}
+.form-group label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:'Barlow',sans-serif;font-size:.95rem;padding:.9rem 1rem;outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted2)}
+.form-group select option{background:var(--bg3);color:var(--text)}
+.booking-success{padding:2rem 0}
+@media(max-width:900px){.booking-section{padding:5rem 1.5rem}.booking-inner{grid-template-columns:1fr;gap:2.5rem}.form-row{grid-template-columns:1fr}}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10000;align-items:center;justify-content:center}.modal-overlay.active{display:flex}.modal-box{background:#fff;max-width:400px;width:90%;padding:2.5rem;text-align:center;position:relative;animation:popIn .25s ease}.modal-box h3{font-size:1.2rem;color:#1a1a1a;margin-bottom:.5rem;font-weight:700}.modal-box p{font-size:.85rem;color:#666;line-height:1.6;margin-bottom:1.5rem}.modal-phone{font-size:1.8rem;font-weight:900;color:#E8690A;display:block;margin-bottom:1rem;text-decoration:none}.modal-addr{font-size:.82rem;color:#888;margin-bottom:1.5rem}.modal-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}.modal-btn-call{background:#E8690A;color:#fff;padding:12px 28px;border:none;cursor:pointer;font-weight:700;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-block}.modal-btn-map{background:transparent;color:#E8690A;padding:11px 28px;border:1.5px solid #E8690A;cursor:pointer;font-weight:700;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-block}.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#999;line-height:1}@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
+
+<div class="scroll-bar" id="scrollBar"></div>
 
 <nav id="nav">
   <div class="nav-logo">
@@ -340,25 +373,27 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
     <li><a href="#services">Services</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#hours">Hours</a></li>
+    <li><a href="#booking">Request Service</a></li>
   </ul>
-  <a href="tel:3149971598" class="nav-call">Call Now</a>
+  <a href="tel:3149971598" class="nav-call magnetic"><span class="magnetic-inner">Call Now</span></a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
+  <canvas id="heroCanvas"></canvas>
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
   <div class="hero-line"></div>
   <div class="hero-tag reveal"><div class="hero-tag-dot"></div><div class="hero-tag-line"></div>St. Charles, MO · Licensed &amp; Insured</div>
-  <h1 class="hero-headline reveal d1">
+  <h1 class="hero-headline reveal d1" data-split-words>
     When<br>
     <span class="outline">Pipes</span><br>
     <span class="accent">Fail.</span>
   </h1>
   <p class="hero-sub reveal d2">M &amp; S Plumbing LLC — St. Charles County's honest, reliable local plumber. Fast response, fair prices, zero surprises.</p>
   <div class="hero-actions reveal d3">
-    <a href="tel:3149971598" class="btn-main">📞 (314) 997-1598</a>
-    <a href="#services" class="btn-sec">Our Services</a>
+    <a href="tel:3149971598" class="btn-main magnetic"><span class="magnetic-inner">📞 (314) 997-1598</span></a>
+    <a href="#booking" class="btn-sec magnetic"><span class="magnetic-inner">Request Service</span></a>
   </div>
   <div class="hero-stats reveal d4">
     <div class="hstat"><div class="hstat-num">4.4<span>★</span></div><div class="hstat-label">Google Rating</div></div>
@@ -485,6 +520,43 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   </div>
 </div>
 
+<!-- BOOKING FORM -->
+<section class="booking-section" id="booking">
+  <div class="booking-inner">
+    <div class="booking-side">
+      <div class="section-label reveal">Request Service</div>
+      <h2 class="section-title reveal d1" data-split>Tell Us What<br><span style="color:var(--accent)">Broke.</span></h2>
+      <p class="reveal d2" style="margin-top:1.5rem">Send a quick description and Mike will text back with a real quote — same business day. Emergency? Just call <a href="tel:3149971598">(314) 997-1598</a> — we pick up.</p>
+      <p class="reveal d3" style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;color:var(--accent);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:0">⚡ Same-day service · Mon–Sat</p>
+    </div>
+    <div class="reveal-right">
+      <form id="bookingForm" name="service-request" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="service-request"/>
+        <div style="display:none"><input name="bot-field"/></div>
+        <div class="form-row">
+          <div class="form-group"><label for="bName">Name</label><input type="text" id="bName" name="name" required placeholder="Your name"/></div>
+          <div class="form-group"><label for="bPhone">Phone</label><input type="tel" id="bPhone" name="phone" required placeholder="(314) 000-0000"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="bService">Service Needed</label><select id="bService" name="service" required><option value="" disabled selected>Choose...</option><option>Emergency Repair</option><option>Drain Cleaning</option><option>Toilet / Faucet</option><option>Water Heater</option><option>Kitchen Plumbing</option><option>General Repair</option><option>Not sure — please advise</option></select></div>
+          <div class="form-group"><label for="bUrgency">Urgency</label><select id="bUrgency" name="urgency"><option value="" disabled selected>How fast?</option><option>EMERGENCY — water actively leaking</option><option>Today if possible</option><option>This week</option><option>Flexible</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="bZip">ZIP Code</label><input type="text" id="bZip" name="zip" placeholder="63303" pattern="[0-9]{5}"/></div>
+          <div class="form-group"><label for="bArea">Area</label><select id="bArea" name="area"><option value="" disabled selected>Where?</option><option>St. Charles</option><option>St. Peters</option><option>O'Fallon</option><option>Wentzville</option><option>Other</option></select></div>
+        </div>
+        <div class="form-group"><label for="bDesc">Describe the Problem</label><textarea id="bDesc" name="description" rows="4" placeholder="Pipe leak under sink, water heater not heating, low pressure in shower..."></textarea></div>
+        <button type="submit" class="btn-main magnetic" style="width:100%;padding:18px;font-size:1.05rem;letter-spacing:2.5px"><span class="magnetic-inner">Send Request</span></button>
+      </form>
+      <div id="bookingSuccess" class="booking-success" style="display:none">
+        <div class="section-label">Got It</div>
+        <h3 class="section-title" style="font-size:clamp(1.8rem,3.5vw,3rem);margin-top:.5rem">We'll Be in <span style="color:var(--accent)">Touch.</span></h3>
+        <p style="font-size:.95rem;color:var(--muted);line-height:1.85;font-weight:300;margin-top:1rem">Mike got your request. He'll text or call within an hour during business hours. Emergency? <a href="tel:3149971598" style="color:var(--accent);font-weight:700;text-decoration:none">(314) 997-1598</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-logo-text">M<em>&amp;</em>S Plumbing LLC</div>
   <div class="footer-copy">© 2026 M &amp; S Plumbing LLC · 1060 Country Club Rd, St. Charles, MO 63303 · (314) 997-1598</div>
@@ -502,14 +574,220 @@ const observer=new IntersectionObserver((entries)=>{
 },{threshold:0.12})
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>observer.observe(el))
 </script>
-<div class="cur" id="cur" style="background:#E8690A"></div><div class="cur-ring" id="curR" style="border-color:#E8690A"></div>
+<div class="modal-overlay" id="bookModal"><div class="modal-box"><button class="modal-close" onclick="closeModal()">&times;</button><h3>M &amp; S Plumbing LLC</h3><p>Ready to book? Give us a call or find us on the map.</p><a href="tel:3149971598" class="modal-phone">(314) 997-1598</a><div class="modal-addr">1060 Country Club Rd, St. Charles, MO 63303</div><div class="modal-btns"><a href="tel:3149971598" class="modal-btn-call">Call Now</a><a href="https://maps.google.com/?q=1060+Country+Club+Rd+St+Charles+MO" target="_blank" class="modal-btn-map">Get Directions</a></div></div></div>
+<script>function openBookModal(){document.getElementById('bookModal').classList.add('active')}function closeModal(){document.getElementById('bookModal').classList.remove('active')}document.getElementById('bookModal').addEventListener('click',function(e){if(e.target===this)closeModal()});</script>
+
+<!-- CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+<!-- Scroll progress -->
+<script>(function(){var bar=document.getElementById('scrollBar');function upd(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(window.scrollY/m)*100:0)+'%'}window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd,{passive:true});upd()})();</script>
+
+<!-- Lenis -->
 <script>
-const C=document.getElementById("cur"),R=document.getElementById("curR");
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+"px";C.style.top=my+"px"});
-(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;R.style.left=rx+"px";R.style.top=ry+"px";requestAnimationFrame(loop)})();
-document.querySelectorAll("a,button,.svc,.svc-card,.rev,.service-card,.trust-card,.stat").forEach(el=>{el.addEventListener("mouseenter",()=>{R.style.transform="translate(-50%,-50%) scale(2.2)";R.style.opacity="0.9"});el.addEventListener("mouseleave",()=>{R.style.transform="translate(-50%,-50%) scale(1)";R.style.opacity="0.5"})});
+(function(){if(!window.Lenis||window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var lenis=new Lenis({lerp:0.1,smoothWheel:true,smoothTouch:false,wheelMultiplier:1});if(window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}else{function r(t){lenis.raf(t);requestAnimationFrame(r)}requestAnimationFrame(r)}document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=a.getAttribute('href');if(id.length<2)return;var t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-60,duration:1.0})})})})();
 </script>
-<div class="modal-overlay" id="bookModal"><div class="modal-box"><button class="modal-close" onclick="closeModal()"></body>times;</button><h3>M</body>S Plumbing LLC</h3><p>Ready to book? Give us a call or find us on the map.</p><a href="tel:3149971598" class="modal-phone">(314) 997-1598</a><div class="modal-addr">1060 Country Club Rd, St. Charles, MO 63303</div><div class="modal-btns"><a href="tel:3149971598" class="modal-btn-call">Call Now</a><a href="https://maps.google.com/?q=1060+Country+Club+Rd+St+Charles+MO" target="_blank" class="modal-btn-map">Get Directions</a></div></div></div><script>function openBookModal(){document.getElementById('bookModal').classList.add('active')}function closeModal(){document.getElementById('bookModal').classList.remove('active')}document.getElementById('bookModal').addEventListener('click',function(e){if(e.target===this)closeModal()});</script>
+
+<!-- THREE.JS HERO: animated 3D pipes drawing along bezier curves + water droplets -->
+<script>
+(function(){
+  if(!window.THREE||window.innerWidth<=900)return;
+  var canvas=document.getElementById('heroCanvas');
+  if(!canvas)return;
+  var W=canvas.offsetWidth,H=canvas.offsetHeight;
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  renderer.setSize(W,H);
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(45,W/H,0.1,1000);
+  camera.position.set(0,0,60);
+
+  // Pause when offscreen
+  var heroVisible=true;
+  if('IntersectionObserver' in window){new IntersectionObserver(function(e){heroVisible=e[0].isIntersecting},{threshold:0.01}).observe(canvas)}
+
+  // PIPES — bezier curves traced with TubeGeometry, with a custom shader that animates the visible portion
+  var pipeMat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uProgress:{value:0},uColor:{value:new THREE.Color(0xD4560A)},uAccent:{value:new THREE.Color(0xFF6B1A)}},
+    vertexShader:`
+      varying float vT;
+      varying vec3 vNormal;
+      void main(){
+        // uv.y goes 0→1 along the length of the tube
+        vT=uv.y;
+        vNormal=normalize(normalMatrix*normal);
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
+      }
+    `,
+    fragmentShader:`
+      uniform float uTime;
+      uniform float uProgress;
+      uniform vec3 uColor;
+      uniform vec3 uAccent;
+      varying float vT;
+      varying vec3 vNormal;
+      void main(){
+        // Animate the "flow front": only show pipe up to progress, with a bright leading edge
+        float frontEdge=smoothstep(uProgress,uProgress-0.06,vT);
+        float visible=step(vT,uProgress);
+        if(visible<0.5)discard;
+        vec3 baseLight=normalize(vec3(0.4,0.7,1.0));
+        float lambert=max(0.0,dot(vNormal,baseLight))*0.6+0.4;
+        vec3 col=uColor*lambert;
+        col+=uAccent*frontEdge*1.8;
+        // Subtle stripe pattern along length
+        float stripe=sin(vT*40.0+uTime*1.5)*0.5+0.5;
+        col+=vec3(0.05,0.03,0.02)*stripe;
+        gl_FragColor=vec4(col,1.0);
+      }
+    `,
+    side:THREE.DoubleSide
+  });
+
+  function randomBezier(){
+    var pts=[];
+    var start=new THREE.Vector3((Math.random()-.5)*40,15+Math.random()*10,(Math.random()-.5)*15);
+    var end=new THREE.Vector3((Math.random()-.5)*40,-15-Math.random()*10,(Math.random()-.5)*15);
+    pts.push(start);
+    for(var i=1;i<4;i++){
+      pts.push(new THREE.Vector3(start.x+(end.x-start.x)*(i/4)+(Math.random()-.5)*15,start.y+(end.y-start.y)*(i/4)+(Math.random()-.5)*6,start.z+(end.z-start.z)*(i/4)+(Math.random()-.5)*8));
+    }
+    pts.push(end);
+    return new THREE.CatmullRomCurve3(pts);
+  }
+
+  var pipes=[];
+  for(var p=0;p<6;p++){
+    var curve=randomBezier();
+    var geo=new THREE.TubeGeometry(curve,80,0.35+Math.random()*0.2,8,false);
+    var mat=pipeMat.clone();
+    mat.uniforms.uProgress.value=Math.random()*1.2;
+    var tube=new THREE.Mesh(geo,mat);
+    tube.userData={speed:0.0015+Math.random()*0.003,phase:Math.random()*2};
+    pipes.push(tube);
+    scene.add(tube);
+  }
+
+  // Water droplets — falling spheres
+  var DROP_COUNT=30;
+  var drops=[];
+  var dropMat=new THREE.MeshBasicMaterial({color:0x55BBEE,transparent:true,opacity:0.7});
+  for(var i=0;i<DROP_COUNT;i++){
+    var d=new THREE.Mesh(new THREE.SphereGeometry(0.25+Math.random()*0.2,8,6),dropMat);
+    d.position.set((Math.random()-.5)*40,Math.random()*30,(Math.random()-.5)*15);
+    d.userData={vy:0.08+Math.random()*0.12,startY:d.position.y};
+    drops.push(d);
+    scene.add(d);
+  }
+
+  // Floating dust particles
+  var DUST=80;
+  var dpos=new Float32Array(DUST*3);
+  for(var i=0;i<DUST;i++){dpos[i*3]=(Math.random()-.5)*60;dpos[i*3+1]=(Math.random()-.5)*40;dpos[i*3+2]=(Math.random()-.5)*20}
+  var dgeo=new THREE.BufferGeometry();
+  dgeo.setAttribute('position',new THREE.BufferAttribute(dpos,3));
+  scene.add(new THREE.Points(dgeo,new THREE.PointsMaterial({color:0xD4560A,size:0.6,transparent:true,opacity:0.35,sizeAttenuation:true})));
+
+  var tmx=0,tmy=0,cmx=0,cmy=0,scrollY=0;
+  document.addEventListener('mousemove',function(e){
+    var hero=document.querySelector('.hero');var r=hero.getBoundingClientRect();
+    if(e.clientY>r.bottom)return;
+    tmx=((e.clientX/window.innerWidth)-.5)*8;
+    tmy=-((e.clientY/window.innerHeight)-.5)*6;
+  });
+  window.addEventListener('scroll',function(){scrollY=window.scrollY||0},{passive:true});
+  window.addEventListener('resize',function(){if(window.innerWidth<=900)return;W=canvas.offsetWidth;H=canvas.offsetHeight;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()},{passive:true});
+
+  (function loop(t){
+    requestAnimationFrame(loop);
+    if(!heroVisible)return;
+    var nt=(t||0)*0.001;
+    // Advance pipes
+    pipes.forEach(function(tube){
+      tube.material.uniforms.uTime.value=nt;
+      var p=tube.material.uniforms.uProgress.value;
+      p+=tube.userData.speed;
+      if(p>1.4){p=-0.05}
+      tube.material.uniforms.uProgress.value=p;
+    });
+    // Water drops fall + reset
+    drops.forEach(function(d){
+      d.position.y-=d.userData.vy;
+      if(d.position.y<-20){d.position.y=20;d.position.x=(Math.random()-.5)*40}
+    });
+    // Mouse parallax on camera
+    cmx+=(tmx-cmx)*.05;cmy+=(tmy-cmy)*.05;
+    camera.position.x=cmx;
+    camera.position.y=cmy-scrollY*0.012;
+    camera.position.z=60+Math.min(scrollY*0.025,30);
+    camera.lookAt(0,0,0);
+    renderer.render(scene,camera);
+  })();
+})();
+</script>
+
+<!-- Split text reveal -->
+<script>
+(function(){
+  if(!window.gsap||!window.ScrollTrigger)return;
+  function split(el){
+    if(el.dataset.splitDone)return;
+    el.dataset.splitDone='1';
+    function proc(n){
+      if(n.nodeType===3){
+        var f=document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function(w){
+          if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(w));return}
+          var ws=document.createElement('span');ws.className='split-word';
+          for(var i=0;i<w.length;i++){var s=document.createElement('span');s.className='split-char';s.textContent=w[i];ws.appendChild(s)}
+          f.appendChild(ws);
+        });
+        n.parentNode.replaceChild(f,n);
+      }else if(n.nodeType===1&&!n.classList.contains('outline')&&!n.classList.contains('accent')){
+        Array.from(n.childNodes).forEach(proc);
+      }
+    }
+    Array.from(el.childNodes).forEach(proc);
+    var chars=el.querySelectorAll('.split-char');
+    ScrollTrigger.create({trigger:el,start:'top 88%',once:true,onEnter:function(){chars.forEach(function(c,i){setTimeout(function(){c.classList.add('in')},i*15)})}});
+  }
+  document.querySelectorAll('[data-split]').forEach(split);
+})();
+</script>
+
+<!-- Magnetic buttons -->
+<script>
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches)return;
+  function bind(el){
+    var inner=el.querySelector('.magnetic-inner');
+    if(!inner){var s=document.createElement('span');s.className='magnetic-inner';while(el.firstChild)s.appendChild(el.firstChild);el.appendChild(s);inner=s}
+    var raf=0,tx=0,ty=0;
+    function apply(){raf=0;el.style.transform='translate('+(tx*.25)+'px,'+(ty*.25)+'px)';inner.style.transform='translate('+(tx*.45)+'px,'+(ty*.45)+'px)'}
+    el.addEventListener('mousemove',function(e){var r=el.getBoundingClientRect();tx=e.clientX-r.left-r.width/2;ty=e.clientY-r.top-r.height/2;if(!raf)raf=requestAnimationFrame(apply)});
+    el.addEventListener('mouseleave',function(){if(raf){cancelAnimationFrame(raf);raf=0}el.style.transform='';inner.style.transform=''});
+  }
+  document.querySelectorAll('.magnetic').forEach(bind);
+})();
+</script>
+
+<!-- Booking form -->
+<script>
+(function(){
+  var form=document.getElementById('bookingForm'),success=document.getElementById('bookingSuccess');
+  if(!form)return;
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var btn=form.querySelector('button[type=submit]');
+    var inner=btn.querySelector('.magnetic-inner')||btn;
+    var orig=inner.textContent;inner.textContent='Sending...';btn.disabled=true;
+    try{await fetch('/',{method:'POST',body:new FormData(form)});form.style.display='none';success.style.display='block'}
+    catch(err){inner.textContent=orig;btn.disabled=false;alert('Something went wrong. Call (314) 997-1598.')}
+  });
+})();
+</script>
 </body>
 </html>
