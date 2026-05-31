@@ -4,6 +4,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>M & S Plumbing LLC | St. Charles, MO</title>
+<!-- SEO -->
+<meta name="keywords" content="plumber St. Charles MO, plumbing repair, water heater, drain cleaning, emergency plumber">
+<meta name="author" content="M &amp; S Plumbing LLC">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="geo.region" content="US-MO">
+<meta name="geo.placename" content="St. Charles, Missouri">
+<meta name="geo.position" content="38.747;-90.553">
+<meta name="ICBM" content="38.747, -90.553">
+<link rel="canonical" href="https://msplumbing-stl.netlify.app/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="business.business">
+<meta property="og:site_name" content="M &amp; S Plumbing LLC">
+<meta property="og:title" content="M &amp; S Plumbing LLC | St. Charles, MO">
+<meta property="og:description" content="M &amp; S Plumbing LLC provides licensed residential and commercial plumbing in St. Charles, MO. Repairs, installs, water heaters, drains. Call (314) 997-1598.">
+<meta property="og:url" content="https://msplumbing-stl.netlify.app/">
+<meta property="og:image" content="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&h=630&q=80&auto=format&fit=crop">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="M &amp; S Plumbing LLC | St. Charles, MO">
+<meta name="twitter:description" content="M &amp; S Plumbing LLC provides licensed residential and commercial plumbing in St. Charles, MO. Repairs, installs, water heaters, drains. Call (314) 997-1598.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&h=630&q=80&auto=format&fit=crop">
+
+<!-- LocalBusiness structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Plumber",
+  "@id": "https://msplumbing-stl.netlify.app/#business",
+  "name": "M & S Plumbing LLC",
+  "description": "M & S Plumbing LLC provides licensed residential and commercial plumbing in St. Charles, MO. Repairs, installs, water heaters, drains. Call (314) 997-1598.",
+  "url": "https://msplumbing-stl.netlify.app/",
+  "telephone": "+1-314-997-1598",
+  "image": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&h=630&q=80&auto=format&fit=crop",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "St. Charles",
+    "addressRegion": "MO",
+    "postalCode": "63303",
+    "addressCountry": "US",
+    "streetAddress": "1060 Country Club Rd"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 38.747,
+    "longitude": -90.553
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "08:00",
+      "closes": "17:00"
+    }
+  ]
+}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -14,7 +85,8 @@
   --accent:#D4560A;
   --accent2:#FF6B1A;
   --blue:#1A3A5C;
-  --blue2:#2255822;
+  --blue2:#2A4A6C;
+  --water:#3498db;
   --text:#F0EDE8;
   --muted:#7A8C99;
   --muted2:#4A5A66;
@@ -24,14 +96,12 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden}
 
-/* GRID TEXTURE */
 body::before{
   content:'';position:fixed;inset:0;
   background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
   background-size:60px 60px;pointer-events:none;z-index:0;
 }
 
-/* SCROLL ANIMATIONS */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
@@ -40,7 +110,6 @@ body::before{
 .reveal-right.visible{opacity:1;transform:translateX(0)}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
 
-/* NAV */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:1000;
   padding:0 3rem;height:72px;display:flex;align-items:center;justify-content:space-between;
@@ -70,7 +139,6 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 }
 .nav-call:hover{background:var(--accent2)}
 
-/* HERO */
 .hero{
   min-height:100vh;display:flex;flex-direction:column;justify-content:center;
   padding:10rem 3rem 6rem;position:relative;overflow:hidden;
@@ -144,14 +212,30 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 .hstat-num span{color:var(--accent);font-size:2.2rem}
 .hstat-label{font-size:.72rem;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
-/* MARQUEE */
 .marquee-wrap{background:var(--accent);padding:.8rem 0;overflow:hidden;position:relative;z-index:1}
 .marquee-track{display:flex;width:max-content;animation:marquee 18s linear infinite}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .marquee-item{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#fff;white-space:nowrap;padding:0 2.5rem;opacity:.9}
 .marquee-dot{color:rgba(255,255,255,.4)}
 
-/* SERVICES */
+/* === SCROLLYTELLING STORY === */
+.story{position:relative;height:600vh;background:#05080C}
+.story-pin{position:sticky;top:0;width:100%;height:100vh;overflow:hidden;background:radial-gradient(ellipse at center,#0A1018 0%,#040608 80%)}
+#storyCanvas{position:absolute;inset:0;width:100%;height:100%}
+.story-overlay{position:absolute;inset:0;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding:0 3rem 7rem}
+.beats{position:relative;width:100%;max-width:680px;text-align:center;min-height:240px}
+.beat{position:absolute;inset:0;opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.beat.in{opacity:1;transform:translateY(0)}
+.beat-label{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:6px;text-transform:uppercase;color:var(--accent2);margin-bottom:1.2rem;display:inline-flex;align-items:center;gap:10px}
+.beat-label::before,.beat-label::after{content:'';width:24px;height:1px;background:var(--accent)}
+.beat-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:800;text-transform:uppercase;line-height:1;letter-spacing:-1px;color:var(--text);margin-bottom:1rem}
+.beat-title em{color:var(--accent);font-style:normal}
+.beat-sub{font-size:1rem;color:var(--muted);line-height:1.7;font-weight:300;max-width:520px;margin:0 auto}
+.brail{position:absolute;right:3rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:5}
+.brail-dot{width:8px;height:8px;border-radius:50%;background:rgba(212,86,10,.25);transition:background .3s,transform .3s}
+.brail-dot.active{background:var(--accent2);transform:scale(1.6);box-shadow:0 0 12px rgba(255,107,26,.6)}
+.story-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,transparent 55%,rgba(5,8,12,.85) 100%);pointer-events:none}
+
 .services-section{padding:8rem 3rem;position:relative;z-index:1}
 .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:4rem;gap:2rem;flex-wrap:wrap}
 .section-label{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
@@ -198,7 +282,29 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 }
 .svc:hover .svc-arrow{opacity:1;transform:translateX(0)}
 
-/* TRUST SECTION */
+/* === GALLERY (NEW) === */
+.gallery-section{padding:8rem 3rem;position:relative;z-index:1;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.gallery-inner{max-width:1300px;margin:0 auto}
+.gallery-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:120px;gap:14px;margin-top:3rem}
+.gtile{position:relative;overflow:hidden;background:var(--bg3);clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.gtile::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,86,10,.1) 0%,transparent 50%);z-index:1;opacity:0;transition:opacity .4s}
+.gtile:hover{transform:translateY(-4px)}
+.gtile:hover::before{opacity:1}
+.gtile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1);filter:saturate(.85) contrast(1.05)}
+.gtile:hover img{transform:scale(1.08)}
+.gtile-meta{position:absolute;left:0;right:0;bottom:0;padding:1rem 1.2rem;background:linear-gradient(to top,rgba(5,8,12,.95) 0%,transparent 100%);z-index:2;transform:translateY(8px);opacity:0;transition:transform .4s,opacity .4s}
+.gtile:hover .gtile-meta{transform:translateY(0);opacity:1}
+.gtile-tag{font-family:'Barlow Condensed',sans-serif;font-size:.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:3px}
+.gtile-title{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:#fff;letter-spacing:.5px}
+.gtile.size-a{grid-column:span 5;grid-row:span 3}
+.gtile.size-b{grid-column:span 4;grid-row:span 2}
+.gtile.size-c{grid-column:span 3;grid-row:span 3}
+.gtile.size-d{grid-column:span 4;grid-row:span 3}
+.gtile.size-e{grid-column:span 5;grid-row:span 2}
+.gtile.size-f{grid-column:span 3;grid-row:span 2}
+.gtile.size-g{grid-column:span 6;grid-row:span 2}
+.gtile.size-h{grid-column:span 6;grid-row:span 2}
+
 .trust-section{padding:8rem 3rem;background:var(--bg2);position:relative;z-index:1;overflow:hidden}
 .trust-section::before{
   content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);
@@ -247,7 +353,6 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 .tcard-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
 .tcard-val{font-size:.82rem;color:var(--muted);font-weight:300}
 
-/* REVIEWS */
 .reviews-section{padding:8rem 3rem;position:relative;z-index:1}
 .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
 .rcard{
@@ -275,7 +380,6 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 }
 .rcard-name{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
 
-/* HOURS + CTA */
 .bottom-section{display:grid;grid-template-columns:1fr 1fr;min-height:60vh;position:relative;z-index:1}
 .hours-panel{background:var(--bg2);padding:6rem 4rem;border-right:1px solid var(--border)}
 .hours-rows{margin-top:2.5rem}
@@ -306,7 +410,6 @@ nav.scrolled{background:rgba(8,12,16,.95);backdrop-filter:blur(16px);border-colo
 .cdetail-label{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .cdetail-val{font-size:.95rem;color:var(--text)}
 
-/* FOOTER */
 footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
 .footer-logo-text{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:3px;text-transform:uppercase}
 .footer-logo-text em{color:var(--accent);font-style:normal}
@@ -322,26 +425,28 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   .bottom-section{grid-template-columns:1fr}.hours-panel{border-right:none;border-bottom:1px solid var(--border)}
   .hours-panel,.contact-panel{padding:4rem 1.5rem}
   footer{padding:1.5rem}
+  .story{height:auto}.story-pin{position:relative;height:auto;padding:5rem 1.5rem}
+  #storyCanvas{display:none}
+  .beats{position:relative;min-height:auto}
+  .beat{position:relative;opacity:1;transform:none;margin-bottom:3rem}
+  .brail{display:none}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px}
+  .gtile.size-a,.gtile.size-b,.gtile.size-c,.gtile.size-d,.gtile.size-e,.gtile.size-f,.gtile.size-g,.gtile.size-h{grid-column:span 1;grid-row:span 2}
 }
 
-/* SCROLL PROGRESS */
 .scroll-bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1100;transition:width .12s linear}
 
-/* SPLIT TEXT */
 .split-line{display:block;overflow:hidden;line-height:1.05}
 .split-char{display:inline-block;will-change:transform,opacity;transform:translateY(110%);opacity:0;transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .8s ease}
 .split-char.in{transform:translateY(0);opacity:1}
 .split-word{display:inline-block;white-space:nowrap}
 
-/* MAGNETIC */
 .magnetic{transition:transform .3s cubic-bezier(.2,.7,.3,1)}
 .magnetic-inner{display:inline-block;transition:transform .3s cubic-bezier(.2,.7,.3,1);pointer-events:none}
 
-/* HERO CANVAS */
 #heroCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.7}
 .hero>*:not(#heroCanvas){position:relative;z-index:2}
 
-/* BOOKING FORM */
 .booking-section{background:var(--bg2);padding:8rem 3rem;border-top:1px solid var(--border);position:relative;z-index:1}
 .booking-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start}
 .booking-side p{font-size:.95rem;color:var(--muted);line-height:1.85;font-weight:300;margin-bottom:2rem;max-width:380px}
@@ -371,6 +476,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   </div>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Work</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#hours">Hours</a></li>
     <li><a href="#booking">Request Service</a></li>
@@ -385,7 +491,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   <div class="hero-glow2"></div>
   <div class="hero-line"></div>
   <div class="hero-tag reveal"><div class="hero-tag-dot"></div><div class="hero-tag-line"></div>St. Charles, MO · Licensed &amp; Insured</div>
-  <h1 class="hero-headline reveal d1" data-split-words>
+  <h1 class="hero-headline reveal d1">
     When<br>
     <span class="outline">Pipes</span><br>
     <span class="accent">Fail.</span>
@@ -423,6 +529,27 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   </div>
 </div>
 
+<!-- SCROLLYTELLING STORY: water flows through pipes -->
+<section class="story">
+  <div class="story-pin">
+    <canvas id="storyCanvas"></canvas>
+    <div class="story-gradient"></div>
+    <div class="brail">
+      <div class="brail-dot active"></div><div class="brail-dot"></div><div class="brail-dot"></div><div class="brail-dot"></div><div class="brail-dot"></div><div class="brail-dot"></div>
+    </div>
+    <div class="story-overlay">
+      <div class="beats">
+        <div class="beat in"><div class="beat-label">Beat 01</div><h2 class="beat-title">A <em>Leak</em> Begins</h2><p class="beat-sub">It always starts small. A drip under the sink. A ceiling stain. A pressure drop you swear wasn't there last week.</p></div>
+        <div class="beat"><div class="beat-label">Beat 02</div><h2 class="beat-title">Water Enters the <em>Network</em></h2><p class="beat-sub">Every house has miles of pipe behind the drywall. When one fitting fails, the whole system feels it.</p></div>
+        <div class="beat"><div class="beat-label">Beat 03</div><h2 class="beat-title">Pressure Builds. <em>Fast.</em></h2><p class="beat-sub">Burst pipes don't politely wait. The longer you wait, the more flooring, drywall, and cabinets you replace.</p></div>
+        <div class="beat"><div class="beat-label">Beat 04</div><h2 class="beat-title">We Show <em>Up.</em></h2><p class="beat-sub">Mike answers the phone himself. Same day, most cases. No call centers, no 3-day callback windows.</p></div>
+        <div class="beat"><div class="beat-label">Beat 05</div><h2 class="beat-title">The Leak Is <em>Sealed.</em></h2><p class="beat-sub">Diagnosed, fixed, and pressure-tested. Done right the first time — not a patch that fails next Sunday.</p></div>
+        <div class="beat"><div class="beat-label">Beat 06</div><h2 class="beat-title">Water Flows. <em>Clean.</em></h2><p class="beat-sub">Your home back to normal. No surprise bill, no mess left behind, and a number to call if anything ever shifts.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- SERVICES -->
 <section class="services-section" id="services">
   <div style="max-width:1200px;margin:0 auto">
@@ -440,6 +567,29 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
       <div class="svc"><div class="svc-num">04</div><div class="svc-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div class="svc-name">Water Heaters</div><div class="svc-desc">Repair or replace any water heater — tank or tankless, all makes and models.</div><div class="svc-arrow">Learn more →</div></div>
       <div class="svc"><div class="svc-num">05</div><div class="svc-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="svc-name">Kitchen Plumbing</div><div class="svc-desc">Garbage disposals, dishwasher lines, sink repairs. Full kitchen plumbing handled quickly.</div><div class="svc-arrow">Learn more →</div></div>
       <div class="svc"><div class="svc-num">06</div><div class="svc-icon-wrap"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3-3a1 1 0 000-1.4L19.1 3.3a1 1 0 00-1.4 0l-3 3z"/><path d="M13 8L4 17a2 2 0 000 3h3a2 2 0 003 0l9-9"/></svg></div><div class="svc-name">General Repairs</div><div class="svc-desc">Leaking pipes, shutoff valves, pressure issues. We diagnose and fix all household plumbing problems.</div><div class="svc-arrow">Learn more →</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-inner">
+    <div class="section-header">
+      <div class="reveal-left">
+        <div class="section-label">Recent Work</div>
+        <h2 class="section-title">From the<br>Job Site</h2>
+      </div>
+      <p class="section-sub reveal-right">Real St. Charles homes. Real repairs. The kind of plumbing you don't notice — because it's finally working the way it should.</p>
+    </div>
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <div class="gtile size-a"><img alt="Copper pipe repair" data-src="copper-pipe-repair" data-tag="Repair" data-title="Copper Pipe Repair"><div class="gtile-meta"><div class="gtile-tag">Repair</div><div class="gtile-title">Copper Pipe Repair</div></div></div>
+      <div class="gtile size-b"><img alt="Water heater install" data-src="water-heater-install" data-tag="Install" data-title="40-Gal Water Heater"><div class="gtile-meta"><div class="gtile-tag">Install</div><div class="gtile-title">40-Gal Water Heater</div></div></div>
+      <div class="gtile size-c"><img alt="Kitchen faucet" data-src="kitchen-faucet" data-tag="Install" data-title="Kitchen Faucet Swap"><div class="gtile-meta"><div class="gtile-tag">Install</div><div class="gtile-title">Kitchen Faucet Swap</div></div></div>
+      <div class="gtile size-d"><img alt="Drain cleaning" data-src="drain-cleaning" data-tag="Service" data-title="Main Drain Snaked"><div class="gtile-meta"><div class="gtile-tag">Service</div><div class="gtile-title">Main Drain Snaked</div></div></div>
+      <div class="gtile size-e"><img alt="Bathroom toilet install" data-src="toilet-install" data-tag="Install" data-title="Comfort-Height Toilet"><div class="gtile-meta"><div class="gtile-tag">Install</div><div class="gtile-title">Comfort-Height Toilet</div></div></div>
+      <div class="gtile size-f"><img alt="Garbage disposal" data-src="disposal" data-tag="Install" data-title="Garbage Disposal"><div class="gtile-meta"><div class="gtile-tag">Install</div><div class="gtile-title">Garbage Disposal</div></div></div>
+      <div class="gtile size-g"><img alt="Shutoff valve" data-src="shutoff-valve" data-tag="Repair" data-title="Main Shutoff Valve"><div class="gtile-meta"><div class="gtile-tag">Repair</div><div class="gtile-title">Main Shutoff Valve</div></div></div>
+      <div class="gtile size-h"><img alt="PEX rerouting" data-src="pex-reroute" data-tag="Service" data-title="PEX Line Rerouting"><div class="gtile-meta"><div class="gtile-tag">Service</div><div class="gtile-title">PEX Line Rerouting</div></div></div>
     </div>
   </div>
 </section>
@@ -525,7 +675,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
   <div class="booking-inner">
     <div class="booking-side">
       <div class="section-label reveal">Request Service</div>
-      <h2 class="section-title reveal d1" data-split>Tell Us What<br><span style="color:var(--accent)">Broke.</span></h2>
+      <h2 class="section-title reveal d1">Tell Us What<br><span style="color:var(--accent)">Broke.</span></h2>
       <p class="reveal d2" style="margin-top:1.5rem">Send a quick description and Mike will text back with a real quote — same business day. Emergency? Just call <a href="tel:3149971598">(314) 997-1598</a> — we pick up.</p>
       <p class="reveal d3" style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;color:var(--accent);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:0">⚡ Same-day service · Mon–Sat</p>
     </div>
@@ -563,19 +713,48 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 3rem
 </footer>
 
 <script>
-// Nav scroll effect
-window.addEventListener('scroll',()=>{
-  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)
-})
-
-// Scroll reveal
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
-},{threshold:0.12})
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>observer.observe(el))
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)});
+var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.12});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function(el){observer.observe(el)});
 </script>
+
 <div class="modal-overlay" id="bookModal"><div class="modal-box"><button class="modal-close" onclick="closeModal()">&times;</button><h3>M &amp; S Plumbing LLC</h3><p>Ready to book? Give us a call or find us on the map.</p><a href="tel:3149971598" class="modal-phone">(314) 997-1598</a><div class="modal-addr">1060 Country Club Rd, St. Charles, MO 63303</div><div class="modal-btns"><a href="tel:3149971598" class="modal-btn-call">Call Now</a><a href="https://maps.google.com/?q=1060+Country+Club+Rd+St+Charles+MO" target="_blank" class="modal-btn-map">Get Directions</a></div></div></div>
 <script>function openBookModal(){document.getElementById('bookModal').classList.add('active')}function closeModal(){document.getElementById('bookModal').classList.remove('active')}document.getElementById('bookModal').addEventListener('click',function(e){if(e.target===this)closeModal()});</script>
+
+<!-- Gallery image loader with themed placeholders -->
+<script>
+(function(){
+  function placeholder(title,tag){
+    var c=document.createElement('canvas');c.width=600;c.height=400;
+    var x=c.getContext('2d');
+    var g=x.createLinearGradient(0,0,600,400);g.addColorStop(0,'#0E141C');g.addColorStop(1,'#141C26');
+    x.fillStyle=g;x.fillRect(0,0,600,400);
+    // grid
+    x.strokeStyle='rgba(212,86,10,0.06)';x.lineWidth=1;
+    for(var i=0;i<600;i+=30){x.beginPath();x.moveTo(i,0);x.lineTo(i,400);x.stroke()}
+    for(var j=0;j<400;j+=30){x.beginPath();x.moveTo(0,j);x.lineTo(600,j);x.stroke()}
+    // wrench icon
+    x.strokeStyle='rgba(212,86,10,0.45)';x.lineWidth=3;x.lineCap='round';
+    x.beginPath();x.arc(300,180,42,0,Math.PI*2);x.stroke();
+    x.beginPath();x.moveTo(300,222);x.lineTo(300,290);x.stroke();
+    x.beginPath();x.arc(300,180,28,0,Math.PI*2);x.stroke();
+    // text
+    x.fillStyle='#D4560A';x.font='bold 14px Barlow Condensed,sans-serif';x.textAlign='center';
+    x.fillText(tag.toUpperCase(),300,335);
+    x.fillStyle='#F0EDE8';x.font='bold 22px Barlow Condensed,sans-serif';
+    x.fillText(title,300,365);
+    return c.toDataURL();
+  }
+  document.querySelectorAll('#galleryGrid img').forEach(function(img){
+    var src=img.dataset.src,tag=img.dataset.tag||'Work',title=img.dataset.title||'Recent Job';
+    var trial=new Image();
+    trial.onload=function(){img.src=trial.src};
+    trial.onerror=function(){img.src=placeholder(title,tag)};
+    trial.src='./gallery/'+src+'.jpg';
+    setTimeout(function(){if(!img.src){img.src=placeholder(title,tag)}},800);
+  });
+})();
+</script>
 
 <!-- CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -588,10 +767,10 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obse
 
 <!-- Lenis -->
 <script>
-(function(){if(!window.Lenis||window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var lenis=new Lenis({lerp:0.1,smoothWheel:true,smoothTouch:false,wheelMultiplier:1});if(window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}else{function r(t){lenis.raf(t);requestAnimationFrame(r)}requestAnimationFrame(r)}document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=a.getAttribute('href');if(id.length<2)return;var t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-60,duration:1.0})})})})();
+(function(){if(!window.Lenis||window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var lenis=new Lenis({lerp:0.07,smoothWheel:true,smoothTouch:false,wheelMultiplier:0.85});if(window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}else{function r(t){lenis.raf(t);requestAnimationFrame(r)}requestAnimationFrame(r)}document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=a.getAttribute('href');if(id.length<2)return;var t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-60,duration:1.0})})})})();
 </script>
 
-<!-- THREE.JS HERO: animated 3D pipes drawing along bezier curves + water droplets -->
+<!-- HERO CANVAS: animated pipe network in background -->
 <script>
 (function(){
   if(!window.THREE||window.innerWidth<=900)return;
@@ -605,45 +784,13 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obse
   var camera=new THREE.PerspectiveCamera(45,W/H,0.1,1000);
   camera.position.set(0,0,60);
 
-  // Pause when offscreen
   var heroVisible=true;
   if('IntersectionObserver' in window){new IntersectionObserver(function(e){heroVisible=e[0].isIntersecting},{threshold:0.01}).observe(canvas)}
 
-  // PIPES — bezier curves traced with TubeGeometry, with a custom shader that animates the visible portion
   var pipeMat=new THREE.ShaderMaterial({
     uniforms:{uTime:{value:0},uProgress:{value:0},uColor:{value:new THREE.Color(0xD4560A)},uAccent:{value:new THREE.Color(0xFF6B1A)}},
-    vertexShader:`
-      varying float vT;
-      varying vec3 vNormal;
-      void main(){
-        // uv.y goes 0→1 along the length of the tube
-        vT=uv.y;
-        vNormal=normalize(normalMatrix*normal);
-        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
-      }
-    `,
-    fragmentShader:`
-      uniform float uTime;
-      uniform float uProgress;
-      uniform vec3 uColor;
-      uniform vec3 uAccent;
-      varying float vT;
-      varying vec3 vNormal;
-      void main(){
-        // Animate the "flow front": only show pipe up to progress, with a bright leading edge
-        float frontEdge=smoothstep(uProgress,uProgress-0.06,vT);
-        float visible=step(vT,uProgress);
-        if(visible<0.5)discard;
-        vec3 baseLight=normalize(vec3(0.4,0.7,1.0));
-        float lambert=max(0.0,dot(vNormal,baseLight))*0.6+0.4;
-        vec3 col=uColor*lambert;
-        col+=uAccent*frontEdge*1.8;
-        // Subtle stripe pattern along length
-        float stripe=sin(vT*40.0+uTime*1.5)*0.5+0.5;
-        col+=vec3(0.05,0.03,0.02)*stripe;
-        gl_FragColor=vec4(col,1.0);
-      }
-    `,
+    vertexShader:'varying float vT;varying vec3 vNormal;void main(){vT=uv.y;vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+    fragmentShader:'uniform float uTime;uniform float uProgress;uniform vec3 uColor;uniform vec3 uAccent;varying float vT;varying vec3 vNormal;void main(){float frontEdge=smoothstep(uProgress,uProgress-0.06,vT);float visible=step(vT,uProgress);if(visible<0.5)discard;vec3 baseLight=normalize(vec3(0.4,0.7,1.0));float lambert=max(0.0,dot(vNormal,baseLight))*0.6+0.4;vec3 col=uColor*lambert;col+=uAccent*frontEdge*1.8;float stripe=sin(vT*40.0+uTime*1.5)*0.5+0.5;col+=vec3(0.05,0.03,0.02)*stripe;gl_FragColor=vec4(col,1.0);}',
     side:THREE.DoubleSide
   });
 
@@ -652,9 +799,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obse
     var start=new THREE.Vector3((Math.random()-.5)*40,15+Math.random()*10,(Math.random()-.5)*15);
     var end=new THREE.Vector3((Math.random()-.5)*40,-15-Math.random()*10,(Math.random()-.5)*15);
     pts.push(start);
-    for(var i=1;i<4;i++){
-      pts.push(new THREE.Vector3(start.x+(end.x-start.x)*(i/4)+(Math.random()-.5)*15,start.y+(end.y-start.y)*(i/4)+(Math.random()-.5)*6,start.z+(end.z-start.z)*(i/4)+(Math.random()-.5)*8));
-    }
+    for(var i=1;i<4;i++){pts.push(new THREE.Vector3(start.x+(end.x-start.x)*(i/4)+(Math.random()-.5)*15,start.y+(end.y-start.y)*(i/4)+(Math.random()-.5)*6,start.z+(end.z-start.z)*(i/4)+(Math.random()-.5)*8))}
     pts.push(end);
     return new THREE.CatmullRomCurve3(pts);
   }
@@ -667,37 +812,16 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obse
     mat.uniforms.uProgress.value=Math.random()*1.2;
     var tube=new THREE.Mesh(geo,mat);
     tube.userData={speed:0.0015+Math.random()*0.003,phase:Math.random()*2};
-    pipes.push(tube);
-    scene.add(tube);
+    pipes.push(tube);scene.add(tube);
   }
 
-  // Water droplets — falling spheres
-  var DROP_COUNT=30;
-  var drops=[];
-  var dropMat=new THREE.MeshBasicMaterial({color:0x55BBEE,transparent:true,opacity:0.7});
-  for(var i=0;i<DROP_COUNT;i++){
-    var d=new THREE.Mesh(new THREE.SphereGeometry(0.25+Math.random()*0.2,8,6),dropMat);
-    d.position.set((Math.random()-.5)*40,Math.random()*30,(Math.random()-.5)*15);
-    d.userData={vy:0.08+Math.random()*0.12,startY:d.position.y};
-    drops.push(d);
-    scene.add(d);
-  }
-
-  // Floating dust particles
-  var DUST=80;
-  var dpos=new Float32Array(DUST*3);
+  var DUST=80,dpos=new Float32Array(DUST*3);
   for(var i=0;i<DUST;i++){dpos[i*3]=(Math.random()-.5)*60;dpos[i*3+1]=(Math.random()-.5)*40;dpos[i*3+2]=(Math.random()-.5)*20}
-  var dgeo=new THREE.BufferGeometry();
-  dgeo.setAttribute('position',new THREE.BufferAttribute(dpos,3));
+  var dgeo=new THREE.BufferGeometry();dgeo.setAttribute('position',new THREE.BufferAttribute(dpos,3));
   scene.add(new THREE.Points(dgeo,new THREE.PointsMaterial({color:0xD4560A,size:0.6,transparent:true,opacity:0.35,sizeAttenuation:true})));
 
   var tmx=0,tmy=0,cmx=0,cmy=0,scrollY=0;
-  document.addEventListener('mousemove',function(e){
-    var hero=document.querySelector('.hero');var r=hero.getBoundingClientRect();
-    if(e.clientY>r.bottom)return;
-    tmx=((e.clientX/window.innerWidth)-.5)*8;
-    tmy=-((e.clientY/window.innerHeight)-.5)*6;
-  });
+  document.addEventListener('mousemove',function(e){var hero=document.querySelector('.hero');var r=hero.getBoundingClientRect();if(e.clientY>r.bottom)return;tmx=((e.clientX/window.innerWidth)-.5)*8;tmy=-((e.clientY/window.innerHeight)-.5)*6});
   window.addEventListener('scroll',function(){scrollY=window.scrollY||0},{passive:true});
   window.addEventListener('resize',function(){if(window.innerWidth<=900)return;W=canvas.offsetWidth;H=canvas.offsetHeight;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()},{passive:true});
 
@@ -705,56 +829,229 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obse
     requestAnimationFrame(loop);
     if(!heroVisible)return;
     var nt=(t||0)*0.001;
-    // Advance pipes
-    pipes.forEach(function(tube){
-      tube.material.uniforms.uTime.value=nt;
-      var p=tube.material.uniforms.uProgress.value;
-      p+=tube.userData.speed;
-      if(p>1.4){p=-0.05}
-      tube.material.uniforms.uProgress.value=p;
-    });
-    // Water drops fall + reset
-    drops.forEach(function(d){
-      d.position.y-=d.userData.vy;
-      if(d.position.y<-20){d.position.y=20;d.position.x=(Math.random()-.5)*40}
-    });
-    // Mouse parallax on camera
+    pipes.forEach(function(tube){tube.material.uniforms.uTime.value=nt;var p=tube.material.uniforms.uProgress.value;p+=tube.userData.speed;if(p>1.4){p=-0.05}tube.material.uniforms.uProgress.value=p});
     cmx+=(tmx-cmx)*.05;cmy+=(tmy-cmy)*.05;
-    camera.position.x=cmx;
-    camera.position.y=cmy-scrollY*0.012;
-    camera.position.z=60+Math.min(scrollY*0.025,30);
+    camera.position.x=cmx;camera.position.y=cmy-scrollY*0.012;camera.position.z=60+Math.min(scrollY*0.025,30);
     camera.lookAt(0,0,0);
     renderer.render(scene,camera);
   })();
 })();
 </script>
 
-<!-- Split text reveal -->
+<!-- STORY CANVAS: scrollytelling pipe network with water flowing through -->
 <script>
 (function(){
-  if(!window.gsap||!window.ScrollTrigger)return;
-  function split(el){
-    if(el.dataset.splitDone)return;
-    el.dataset.splitDone='1';
-    function proc(n){
-      if(n.nodeType===3){
-        var f=document.createDocumentFragment();
-        n.textContent.split(/(\s+)/).forEach(function(w){
-          if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(w));return}
-          var ws=document.createElement('span');ws.className='split-word';
-          for(var i=0;i<w.length;i++){var s=document.createElement('span');s.className='split-char';s.textContent=w[i];ws.appendChild(s)}
-          f.appendChild(ws);
-        });
-        n.parentNode.replaceChild(f,n);
-      }else if(n.nodeType===1&&!n.classList.contains('outline')&&!n.classList.contains('accent')){
-        Array.from(n.childNodes).forEach(proc);
+  if(!window.THREE||!window.gsap||!window.ScrollTrigger||window.innerWidth<=900)return;
+  var canvas=document.getElementById('storyCanvas');if(!canvas)return;
+  var W=canvas.offsetWidth,H=canvas.offsetHeight;
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.7));
+  renderer.setSize(W,H);
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.05;
+
+  var scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x05080C,0.018);
+  var camera=new THREE.PerspectiveCamera(40,W/H,0.1,500);
+  camera.position.set(0,4,38);camera.lookAt(0,0,0);
+
+  // === LIGHTS (3-point setup, industrial warm) ===
+  var keyLight=new THREE.DirectionalLight(0xFF6B1A,1.3);
+  keyLight.position.set(14,16,12);keyLight.castShadow=true;
+  keyLight.shadow.mapSize.set(1024,1024);
+  keyLight.shadow.camera.near=0.1;keyLight.shadow.camera.far=80;
+  keyLight.shadow.camera.left=-25;keyLight.shadow.camera.right=25;
+  keyLight.shadow.camera.top=25;keyLight.shadow.camera.bottom=-25;
+  scene.add(keyLight);
+
+  var fillLight=new THREE.DirectionalLight(0x4488CC,0.6);
+  fillLight.position.set(-12,8,10);scene.add(fillLight);
+
+  var rimLight=new THREE.DirectionalLight(0xFFFFFF,0.5);
+  rimLight.position.set(0,4,-15);scene.add(rimLight);
+
+  var ambient=new THREE.AmbientLight(0x1A2030,0.6);scene.add(ambient);
+
+  // === PIPE NETWORK ===
+  // Build several interconnected pipe segments (CatmullRom) forming a "network"
+  // Each pipe has a custom water-flow shader: water fills proportional to uFill
+  var pipeNetwork=new THREE.Group();
+  scene.add(pipeNetwork);
+
+  var copperMat=new THREE.MeshStandardMaterial({
+    color:0xB87333,metalness:0.85,roughness:0.32,
+    envMapIntensity:1.0
+  });
+  var jointMat=new THREE.MeshStandardMaterial({
+    color:0x8B5C2E,metalness:0.7,roughness:0.45
+  });
+
+  // Water material (custom shader)
+  function makeWaterMat(){
+    return new THREE.ShaderMaterial({
+      uniforms:{uTime:{value:0},uFill:{value:0},uColor:{value:new THREE.Color(0x3498db)},uHi:{value:new THREE.Color(0x9ec9ff)}},
+      transparent:true,
+      vertexShader:'varying vec2 vUv;varying vec3 vN;void main(){vUv=uv;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+      fragmentShader:'uniform float uTime;uniform float uFill;uniform vec3 uColor;uniform vec3 uHi;varying vec2 vUv;varying vec3 vN;void main(){float fr=vUv.y;if(fr>uFill)discard;float front=smoothstep(uFill-0.04,uFill,fr);float ripple=sin(vUv.y*80.0-uTime*4.0)*0.5+0.5;vec3 light=normalize(vec3(0.4,0.8,0.5));float lambert=max(0.0,dot(vN,light))*0.7+0.5;vec3 col=mix(uColor,uHi,ripple*0.35);col*=lambert;col+=uHi*front*1.5;gl_FragColor=vec4(col,0.88);}'
+    });
+  }
+
+  // Define a deliberate network: 4 vertical risers connected by 3 horizontal runs
+  var pipeRadius=0.55;
+  var pipeSegments=[];
+
+  function addPipeBetween(a,b,bend){
+    var mid=new THREE.Vector3((a.x+b.x)/2+bend.x,(a.y+b.y)/2+bend.y,(a.z+b.z)/2+bend.z);
+    var curve=new THREE.CatmullRomCurve3([a.clone(),mid,b.clone()]);
+    var geo=new THREE.TubeGeometry(curve,40,pipeRadius,16,false);
+    var pipe=new THREE.Mesh(geo,copperMat.clone());
+    pipe.castShadow=true;pipe.receiveShadow=true;
+    pipeNetwork.add(pipe);
+    // inner water mesh, slightly smaller radius
+    var wgeo=new THREE.TubeGeometry(curve,40,pipeRadius*0.78,16,false);
+    var wmat=makeWaterMat();
+    var water=new THREE.Mesh(wgeo,wmat);
+    pipeNetwork.add(water);
+    pipeSegments.push({pipe:pipe,water:water,length:curve.getLength()});
+    return curve;
+  }
+  function addJoint(pos){
+    var s=new THREE.Mesh(new THREE.SphereGeometry(pipeRadius*1.25,18,14),jointMat.clone());
+    s.position.copy(pos);s.castShadow=true;s.receiveShadow=true;
+    pipeNetwork.add(s);return s;
+  }
+
+  // Network geometry (visible from camera at z=38)
+  var nodes=[
+    new THREE.Vector3(-14,8,0),new THREE.Vector3(-14,-2,0),
+    new THREE.Vector3(-5,-2,0),new THREE.Vector3(-5,5,0),
+    new THREE.Vector3(5,5,0),new THREE.Vector3(5,-4,0),
+    new THREE.Vector3(14,-4,0),new THREE.Vector3(14,3,0)
+  ];
+  nodes.forEach(addJoint);
+
+  // Connect nodes (the order defines water flow direction)
+  addPipeBetween(nodes[0],nodes[1],new THREE.Vector3(0.5,0,0));
+  addPipeBetween(nodes[1],nodes[2],new THREE.Vector3(0,-0.5,0));
+  addPipeBetween(nodes[2],nodes[3],new THREE.Vector3(-0.5,0,0));
+  addPipeBetween(nodes[3],nodes[4],new THREE.Vector3(0,0.6,0));
+  addPipeBetween(nodes[4],nodes[5],new THREE.Vector3(0.5,0,0));
+  addPipeBetween(nodes[5],nodes[6],new THREE.Vector3(0,-0.4,0));
+  addPipeBetween(nodes[6],nodes[7],new THREE.Vector3(0.5,0,0));
+
+  // FAUCET at the end
+  var faucetGroup=new THREE.Group();
+  faucetGroup.position.copy(nodes[7]);faucetGroup.position.y+=2.5;
+  var faucetBody=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,2,18),new THREE.MeshStandardMaterial({color:0xCFCFCF,metalness:0.9,roughness:0.18}));
+  faucetBody.castShadow=true;faucetGroup.add(faucetBody);
+  var faucetSpout=new THREE.Mesh(new THREE.TorusGeometry(1.2,0.3,12,24,Math.PI/2),new THREE.MeshStandardMaterial({color:0xCFCFCF,metalness:0.9,roughness:0.18}));
+  faucetSpout.rotation.z=Math.PI;faucetSpout.position.set(0,1,0);faucetSpout.castShadow=true;faucetGroup.add(faucetSpout);
+  scene.add(faucetGroup);
+
+  // Drip / stream from faucet
+  var stream=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.1,3,8),new THREE.MeshStandardMaterial({color:0x9ec9ff,transparent:true,opacity:0.7,emissive:0x336699,emissiveIntensity:0.3}));
+  stream.position.set(1.2,-1,0);stream.scale.y=0;scene.add(stream);
+
+  // Floor (catches shadows + faint reflection feel)
+  var floor=new THREE.Mesh(new THREE.PlaneGeometry(80,40),new THREE.MeshStandardMaterial({color:0x0A0E14,roughness:1,metalness:0.05}));
+  floor.rotation.x=-Math.PI/2;floor.position.y=-9;floor.receiveShadow=true;scene.add(floor);
+
+  // Floating particle dust
+  var DUST=140,dp=new Float32Array(DUST*3);
+  for(var i=0;i<DUST;i++){dp[i*3]=(Math.random()-.5)*45;dp[i*3+1]=(Math.random()-.5)*22;dp[i*3+2]=(Math.random()-.5)*15}
+  var dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+  var dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xFF6B1A,size:0.13,transparent:true,opacity:0.55,sizeAttenuation:true}));
+  scene.add(dust);
+
+  // Leak burst (a sphere that grows/fades for beat 3)
+  var leakBurst=new THREE.Mesh(new THREE.SphereGeometry(0.4,16,12),new THREE.MeshStandardMaterial({color:0x55BBEE,transparent:true,opacity:0,emissive:0x336699,emissiveIntensity:0.6}));
+  leakBurst.position.copy(nodes[3]);leakBurst.position.y+=2;scene.add(leakBurst);
+
+  // === ANIMATION STATE ===
+  var state={
+    netRotY:0,netRotX:0,netScale:0.6,
+    fill:0, // 0..1 across all pipes sequentially
+    faucetY:0, // faucet appears at beat 5/6
+    streamScale:0,
+    burstScale:0,burstOpacity:0,
+    ambientBoost:0
+  };
+  faucetGroup.scale.set(0,0,0);
+
+  gsap.registerPlugin(ScrollTrigger);
+  var tl=gsap.timeline({
+    defaults:{ease:'power3.inOut'},
+    scrollTrigger:{
+      trigger:'.story',start:'top top',end:'bottom bottom',
+      scrub:1.2,pin:'.story-pin',anticipatePin:1,fastScrollEnd:true,
+      onUpdate:function(self){
+        var idx=Math.min(5,Math.floor(self.progress*6));
+        document.querySelectorAll('.beat').forEach(function(b,i){b.classList.toggle('in',i===idx)});
+        document.querySelectorAll('.brail-dot').forEach(function(d,i){d.classList.toggle('active',i===idx)});
       }
     }
-    Array.from(el.childNodes).forEach(proc);
-    var chars=el.querySelectorAll('.split-char');
-    ScrollTrigger.create({trigger:el,start:'top 88%',once:true,onEnter:function(){chars.forEach(function(c,i){setTimeout(function(){c.classList.add('in')},i*15)})}});
-  }
-  document.querySelectorAll('[data-split]').forEach(split);
+  });
+
+  // Beat 1 → 2: rotate into view, water begins entering
+  tl.to(state,{netScale:0.9,netRotY:0.4,fill:0.18,duration:1},0);
+  // Beat 2 → 3: water rushes through network, slight tilt
+  tl.to(state,{netScale:1,netRotY:0.6,netRotX:-0.05,fill:0.55,duration:1},1);
+  // Beat 3: pressure builds, leak burst appears
+  tl.to(state,{fill:0.78,burstScale:6,burstOpacity:0.9,netRotX:-0.08,duration:1},2);
+  // Beat 4: leak fades (sealed), water continues
+  tl.to(state,{burstScale:0.5,burstOpacity:0,fill:0.95,duration:1},3);
+  // Beat 5: faucet reveals, full fill
+  tl.to(state,{fill:1,duration:1},4);
+  tl.to(faucetGroup.scale,{x:1,y:1,z:1,duration:1,ease:'back.out(1.4)'},4);
+  // Beat 6: stream flows, ambient warmth lifts
+  tl.to(state,{streamScale:1,netRotY:0.3,ambientBoost:1,duration:1},5);
+
+  // Resize
+  window.addEventListener('resize',function(){if(window.innerWidth<=900)return;W=canvas.offsetWidth;H=canvas.offsetHeight;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()});
+
+  // IntersectionObserver pause
+  var storyVisible=true;
+  if('IntersectionObserver' in window){new IntersectionObserver(function(e){storyVisible=e[0].isIntersecting},{threshold:0.01}).observe(canvas)}
+
+  (function render(t){
+    requestAnimationFrame(render);
+    if(!storyVisible)return;
+    var nt=(t||0)*0.001;
+
+    pipeNetwork.scale.setScalar(state.netScale);
+    pipeNetwork.rotation.y=state.netRotY;
+    pipeNetwork.rotation.x=state.netRotX;
+
+    // Sequence water fill across segments (each segment fills proportional to its share of total fill)
+    var segCount=pipeSegments.length;
+    var totalProgress=state.fill*segCount;
+    pipeSegments.forEach(function(s,i){
+      var local=Math.max(0,Math.min(1,totalProgress-i));
+      s.water.material.uniforms.uFill.value=local;
+      s.water.material.uniforms.uTime.value=nt;
+    });
+
+    // Leak burst (positioned at node 3 area)
+    leakBurst.scale.setScalar(0.4+state.burstScale*0.5);
+    leakBurst.material.opacity=state.burstOpacity;
+
+    // Faucet stream
+    stream.scale.y=Math.max(0.001,state.streamScale*2.5);
+    stream.position.copy(faucetGroup.position).add(new THREE.Vector3(1.2,-1.5-state.streamScale*0.5,0));
+
+    // Ambient drift
+    dust.rotation.y+=0.0006;
+    dust.rotation.x=Math.sin(nt*0.2)*0.05;
+
+    // Ambient warmth lift on final beat
+    ambient.intensity=0.6+state.ambientBoost*0.4;
+    keyLight.intensity=1.3+state.ambientBoost*0.3;
+
+    renderer.render(scene,camera);
+  })();
 })();
 </script>
 

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://msplumbing-stl.netlify.app/sitemap.xml
