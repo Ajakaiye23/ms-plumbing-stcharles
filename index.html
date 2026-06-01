@@ -770,68 +770,132 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
 (function(){if(!window.Lenis||window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var lenis=new Lenis({lerp:0.07,smoothWheel:true,smoothTouch:false,wheelMultiplier:0.85});if(window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}else{function r(t){lenis.raf(t);requestAnimationFrame(r)}requestAnimationFrame(r)}document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=a.getAttribute('href');if(id.length<2)return;var t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-60,duration:1.0})})})})();
 </script>
 
-<!-- HERO CANVAS: animated pipe network in background -->
+<!-- HERO CANVAS: realistic copper/chrome pipe assemblies -->
 <script>
 (function(){
   if(!window.THREE||window.innerWidth<=900)return;
   var canvas=document.getElementById('heroCanvas');
   if(!canvas)return;
-  var W=canvas.offsetWidth,H=canvas.offsetHeight;
+  function dims(){return {w:window.innerWidth,h:window.innerHeight}}
+  var _d=dims(),W=_d.w,H=_d.h;
   var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
   renderer.setSize(W,H);
+  if('outputColorSpace' in renderer){renderer.outputColorSpace=THREE.SRGBColorSpace}else{renderer.outputEncoding=THREE.sRGBEncoding}
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.05;
   var scene=new THREE.Scene();
-  var camera=new THREE.PerspectiveCamera(45,W/H,0.1,1000);
-  camera.position.set(0,0,60);
+  var camera=new THREE.PerspectiveCamera(42,W/H,0.1,1000);
+  camera.position.set(0,0,26);
 
   var heroVisible=true;
   if('IntersectionObserver' in window){new IntersectionObserver(function(e){heroVisible=e[0].isIntersecting},{threshold:0.01}).observe(canvas)}
 
-  var pipeMat=new THREE.ShaderMaterial({
-    uniforms:{uTime:{value:0},uProgress:{value:0},uColor:{value:new THREE.Color(0xD4560A)},uAccent:{value:new THREE.Color(0xFF6B1A)}},
-    vertexShader:'varying float vT;varying vec3 vNormal;void main(){vT=uv.y;vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
-    fragmentShader:'uniform float uTime;uniform float uProgress;uniform vec3 uColor;uniform vec3 uAccent;varying float vT;varying vec3 vNormal;void main(){float frontEdge=smoothstep(uProgress,uProgress-0.06,vT);float visible=step(vT,uProgress);if(visible<0.5)discard;vec3 baseLight=normalize(vec3(0.4,0.7,1.0));float lambert=max(0.0,dot(vNormal,baseLight))*0.6+0.4;vec3 col=uColor*lambert;col+=uAccent*frontEdge*1.8;float stripe=sin(vT*40.0+uTime*1.5)*0.5+0.5;col+=vec3(0.05,0.03,0.02)*stripe;gl_FragColor=vec4(col,1.0);}',
-    side:THREE.DoubleSide
-  });
+  // --- Procedural environment map so metals actually reflect (warm studio streak) ---
+  function makeEnv(){
+    var c=document.createElement('canvas');c.width=32;c.height=256;var g=c.getContext('2d');
+    var grd=g.createLinearGradient(0,0,0,256);
+    grd.addColorStop(0,'#8a97a8');grd.addColorStop(0.38,'#3b4554');grd.addColorStop(0.46,'#b9c4d2');
+    grd.addColorStop(0.54,'#2b3340');grd.addColorStop(0.78,'#1b222c');grd.addColorStop(1,'#0c1118');
+    g.fillStyle=grd;g.fillRect(0,0,32,256);
+    g.fillStyle='rgba(255,176,108,0.95)';g.fillRect(0,86,32,16);  // warm key window
+    g.fillStyle='rgba(150,190,255,0.55)';g.fillRect(0,150,32,8);  // cool fill streak
+    var tex=new THREE.CanvasTexture(c);tex.mapping=THREE.EquirectangularReflectionMapping;
+    var pmrem=new THREE.PMREMGenerator(renderer);pmrem.compileEquirectangularShader();
+    var rt=pmrem.fromEquirectangular(tex);tex.dispose();pmrem.dispose();return rt.texture;
+  }
+  scene.environment=makeEnv();
 
-  function randomBezier(){
-    var pts=[];
-    var start=new THREE.Vector3((Math.random()-.5)*40,15+Math.random()*10,(Math.random()-.5)*15);
-    var end=new THREE.Vector3((Math.random()-.5)*40,-15-Math.random()*10,(Math.random()-.5)*15);
-    pts.push(start);
-    for(var i=1;i<4;i++){pts.push(new THREE.Vector3(start.x+(end.x-start.x)*(i/4)+(Math.random()-.5)*15,start.y+(end.y-start.y)*(i/4)+(Math.random()-.5)*6,start.z+(end.z-start.z)*(i/4)+(Math.random()-.5)*8))}
-    pts.push(end);
-    return new THREE.CatmullRomCurve3(pts);
+  // --- Materials (slightly < full metal + warm emissive so copper never goes black) ---
+  var copper=new THREE.MeshStandardMaterial({color:0xAE551F,metalness:0.78,roughness:0.32,envMapIntensity:1.5,emissive:0x2a1004,emissiveIntensity:0.3});
+  var copperWorn=new THREE.MeshStandardMaterial({color:0x8F4A24,metalness:0.74,roughness:0.48,envMapIntensity:1.25,emissive:0x230f06,emissiveIntensity:0.32});
+  var chrome=new THREE.MeshStandardMaterial({color:0xC6D0D9,metalness:0.9,roughness:0.16,envMapIntensity:1.7,emissive:0x121821,emissiveIntensity:0.34});
+  var brass=new THREE.MeshStandardMaterial({color:0xC09636,metalness:0.8,roughness:0.32,envMapIntensity:1.5,emissive:0x261b04,emissiveIntensity:0.34});
+  var pipeMats=[copper,copper,copperWorn,chrome];
+
+  // --- Build one elbow pipe assembly: two runs meeting at a right angle, brass fittings ---
+  function buildAssembly(){
+    var g=new THREE.Group();
+    var mat=pipeMats[(Math.random()*pipeMats.length)|0];
+    var R=0.42+Math.random()*0.12;
+    var L1=3.5+Math.random()*4.5, L2=3+Math.random()*4;
+    // vertical run (origin -> +Y)
+    var v=new THREE.Mesh(new THREE.CylinderGeometry(R,R,L1,28,1),mat);
+    v.position.y=L1/2; g.add(v);
+    // horizontal run from corner (0,L1,0) -> +X
+    var hMesh=new THREE.Mesh(new THREE.CylinderGeometry(R,R,L2,28,1),mat);
+    hMesh.rotation.z=Math.PI/2; hMesh.position.set(L2/2,L1,0); g.add(hMesh);
+    // elbow fitting at corner (brass sphere reads as a rounded joint)
+    var elbow=new THREE.Mesh(new THREE.SphereGeometry(R*1.42,24,18),brass);
+    elbow.position.set(0,L1,0); g.add(elbow);
+    // coupling rings (brass) near the free ends + mid spans
+    function ring(pos,axis){
+      var r=new THREE.Mesh(new THREE.CylinderGeometry(R*1.22,R*1.22,0.5,28,1),brass);
+      r.position.copy(pos); if(axis==='x')r.rotation.z=Math.PI/2; g.add(r);
+    }
+    ring(new THREE.Vector3(0,L1*0.5,0),'y');
+    ring(new THREE.Vector3(0,0.4,0),'y');
+    ring(new THREE.Vector3(L2-0.4,L1,0),'x');
+    // optional valve handwheel on ~1/3 of assemblies
+    if(Math.random()<0.34){
+      var body=new THREE.Mesh(new THREE.CylinderGeometry(R*1.35,R*1.35,1.1,24,1),brass);
+      body.position.set(L2*0.5,L1,0); body.rotation.z=Math.PI/2; g.add(body);
+      var stem=new THREE.Mesh(new THREE.CylinderGeometry(R*0.3,R*0.3,1.3,16,1),chrome);
+      stem.position.set(L2*0.5,L1+0.9,0); g.add(stem);
+      var wheel=new THREE.Mesh(new THREE.TorusGeometry(0.95,0.16,12,28),chrome);
+      wheel.position.set(L2*0.5,L1+1.5,0); wheel.rotation.x=Math.PI/2; g.add(wheel);
+    }
+    // centre the assembly roughly on its bounding box so it rotates around itself
+    g.children.forEach(function(m){m.position.x-=L2*0.4;m.position.y-=L1*0.55;});
+    return g;
   }
 
-  var pipes=[];
-  for(var p=0;p<6;p++){
-    var curve=randomBezier();
-    var geo=new THREE.TubeGeometry(curve,80,0.35+Math.random()*0.2,8,false);
-    var mat=pipeMat.clone();
-    mat.uniforms.uProgress.value=Math.random()*1.2;
-    var tube=new THREE.Mesh(geo,mat);
-    tube.userData={speed:0.0015+Math.random()*0.003,phase:Math.random()*2};
-    pipes.push(tube);scene.add(tube);
+  var world=new THREE.Group();scene.add(world);
+  var assemblies=[];
+  // Even grid of slots (jittered) guarantees coverage; rotation kept mostly side-on
+  // so pipe LENGTH faces camera instead of foreshortening into a dark disc.
+  var slots=[
+    {x:-12,y:5,z:-2,s:0.8},{x:-1,y:4,z:0,s:0.92},{x:11,y:6,z:-3,s:0.78},
+    {x:-14,y:-5,z:-4,s:0.74},{x:-3,y:-6,z:-1,s:0.86},{x:12,y:-4,z:-2,s:0.82},
+    {x:5,y:0,z:-7,s:0.66},{x:-7,y:-1,z:-9,s:0.6},{x:16,y:1,z:-8,s:0.6}
+  ];
+  for(var i=0;i<slots.length;i++){
+    var a=buildAssembly();var sl=slots[i];
+    a.scale.setScalar(sl.s);
+    a.position.set(sl.x+(Math.random()-.5)*3, sl.y+(Math.random()-.5)*3, sl.z);
+    a.rotation.set((Math.random()-.5)*1.1, Math.random()*Math.PI*2, (Math.random()-.5)*1.1);
+    a.userData={rx:(Math.random()-.5)*0.0012,ry:0.0012+Math.random()*0.0018,
+                fy:0.2+Math.random()*0.3, fp:Math.random()*6.28, by:a.position.y};
+    assemblies.push(a);world.add(a);
   }
 
-  var DUST=80,dpos=new Float32Array(DUST*3);
-  for(var i=0;i<DUST;i++){dpos[i*3]=(Math.random()-.5)*60;dpos[i*3+1]=(Math.random()-.5)*40;dpos[i*3+2]=(Math.random()-.5)*20}
+  // --- Lights (env does most of the work; lights add crisp highlights) ---
+  var key=new THREE.DirectionalLight(0xffd2a6,2.0); key.position.set(-8,10,8); scene.add(key);
+  var fill=new THREE.DirectionalLight(0x6f9bd6,0.7); fill.position.set(10,-4,6); scene.add(fill);
+  var rim=new THREE.DirectionalLight(0xffffff,1.0); rim.position.set(2,6,-12); scene.add(rim);
+  var pt1=new THREE.PointLight(0xff8a3c,1.8,140); pt1.position.set(-6,4,18); scene.add(pt1);
+  var pt2=new THREE.PointLight(0x9fc0ff,1.1,140); pt2.position.set(10,-6,16); scene.add(pt2);
+  scene.add(new THREE.AmbientLight(0x39444f,0.6));
+
+  // --- Warm ember dust ---
+  var DUST=70,dpos=new Float32Array(DUST*3);
+  for(var d=0;d<DUST;d++){dpos[d*3]=(Math.random()-.5)*48;dpos[d*3+1]=(Math.random()-.5)*30;dpos[d*3+2]=(Math.random()-.5)*16}
   var dgeo=new THREE.BufferGeometry();dgeo.setAttribute('position',new THREE.BufferAttribute(dpos,3));
-  scene.add(new THREE.Points(dgeo,new THREE.PointsMaterial({color:0xD4560A,size:0.6,transparent:true,opacity:0.35,sizeAttenuation:true})));
+  scene.add(new THREE.Points(dgeo,new THREE.PointsMaterial({color:0xFF8A3C,size:0.16,transparent:true,opacity:0.5,sizeAttenuation:true})));
 
   var tmx=0,tmy=0,cmx=0,cmy=0,scrollY=0;
-  document.addEventListener('mousemove',function(e){var hero=document.querySelector('.hero');var r=hero.getBoundingClientRect();if(e.clientY>r.bottom)return;tmx=((e.clientX/window.innerWidth)-.5)*8;tmy=-((e.clientY/window.innerHeight)-.5)*6});
+  document.addEventListener('mousemove',function(e){var hero=document.querySelector('.hero');var r=hero.getBoundingClientRect();if(e.clientY>r.bottom)return;tmx=((e.clientX/window.innerWidth)-.5)*5;tmy=-((e.clientY/window.innerHeight)-.5)*4});
   window.addEventListener('scroll',function(){scrollY=window.scrollY||0},{passive:true});
-  window.addEventListener('resize',function(){if(window.innerWidth<=900)return;W=canvas.offsetWidth;H=canvas.offsetHeight;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()},{passive:true});
+  window.addEventListener('resize',function(){if(window.innerWidth<=900)return;var dd=dims();W=dd.w;H=dd.h;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()},{passive:true});
 
   (function loop(t){
     requestAnimationFrame(loop);
     if(!heroVisible)return;
     var nt=(t||0)*0.001;
-    pipes.forEach(function(tube){tube.material.uniforms.uTime.value=nt;var p=tube.material.uniforms.uProgress.value;p+=tube.userData.speed;if(p>1.4){p=-0.05}tube.material.uniforms.uProgress.value=p});
+    for(var i=0;i<assemblies.length;i++){var a=assemblies[i];a.rotation.x+=a.userData.rx;a.rotation.y+=a.userData.ry;a.position.y=a.userData.by+Math.sin(nt*a.userData.fy+a.userData.fp)*0.5;}
+    world.rotation.y=nt*0.04;
     cmx+=(tmx-cmx)*.05;cmy+=(tmy-cmy)*.05;
-    camera.position.x=cmx;camera.position.y=cmy-scrollY*0.012;camera.position.z=60+Math.min(scrollY*0.025,30);
+    camera.position.x=cmx;camera.position.y=cmy-scrollY*0.006;camera.position.z=26+Math.min(scrollY*0.012,14);
     camera.lookAt(0,0,0);
     renderer.render(scene,camera);
   })();
