@@ -922,6 +922,20 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var camera=new THREE.PerspectiveCamera(40,W/H,0.1,500);
   camera.position.set(0,4,38);camera.lookAt(0,0,0);
 
+  // Procedural env map so copper/chrome actually reflect (matches the hero look)
+  (function(){
+    var c=document.createElement('canvas');c.width=32;c.height=256;var g=c.getContext('2d');
+    var grd=g.createLinearGradient(0,0,0,256);
+    grd.addColorStop(0,'#8a97a8');grd.addColorStop(0.38,'#3b4554');grd.addColorStop(0.46,'#b9c4d2');
+    grd.addColorStop(0.54,'#2b3340');grd.addColorStop(0.78,'#1b222c');grd.addColorStop(1,'#0c1118');
+    g.fillStyle=grd;g.fillRect(0,0,32,256);
+    g.fillStyle='rgba(255,150,60,0.85)';g.fillRect(0,90,32,14);
+    g.fillStyle='rgba(140,180,255,0.45)';g.fillRect(0,150,32,8);
+    var tex=new THREE.CanvasTexture(c);tex.mapping=THREE.EquirectangularReflectionMapping;
+    var pm=new THREE.PMREMGenerator(renderer);pm.compileEquirectangularShader();
+    scene.environment=pm.fromEquirectangular(tex).texture;tex.dispose();pm.dispose();
+  })();
+
   // === LIGHTS (3-point setup, industrial warm) ===
   var keyLight=new THREE.DirectionalLight(0xFF6B1A,1.3);
   keyLight.position.set(14,16,12);keyLight.castShadow=true;
@@ -946,12 +960,14 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   scene.add(pipeNetwork);
 
   var copperMat=new THREE.MeshStandardMaterial({
-    color:0xB87333,metalness:0.85,roughness:0.32,
-    envMapIntensity:1.0
+    color:0xAE551F,metalness:0.78,roughness:0.32,envMapIntensity:1.5,
+    emissive:0x2a1004,emissiveIntensity:0.3
   });
   var jointMat=new THREE.MeshStandardMaterial({
-    color:0x8B5C2E,metalness:0.7,roughness:0.45
+    color:0xC09636,metalness:0.8,roughness:0.32,envMapIntensity:1.5,
+    emissive:0x261b04,emissiveIntensity:0.34
   });
+  var brassMat=jointMat;
 
   // Water material (custom shader)
   function makeWaterMat(){
@@ -967,23 +983,28 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var pipeRadius=0.55;
   var pipeSegments=[];
 
-  function addPipeBetween(a,b,bend){
-    var mid=new THREE.Vector3((a.x+b.x)/2+bend.x,(a.y+b.y)/2+bend.y,(a.z+b.z)/2+bend.z);
-    var curve=new THREE.CatmullRomCurve3([a.clone(),mid,b.clone()]);
-    var geo=new THREE.TubeGeometry(curve,40,pipeRadius,16,false);
-    var pipe=new THREE.Mesh(geo,copperMat.clone());
-    pipe.castShadow=true;pipe.receiveShadow=true;
-    pipeNetwork.add(pipe);
-    // inner water mesh, slightly smaller radius
-    var wgeo=new THREE.TubeGeometry(curve,40,pipeRadius*0.78,16,false);
-    var wmat=makeWaterMat();
-    var water=new THREE.Mesh(wgeo,wmat);
-    pipeNetwork.add(water);
-    pipeSegments.push({pipe:pipe,water:water,length:curve.getLength()});
-    return curve;
+  var UP=new THREE.Vector3(0,1,0);
+  function orient(mesh,a,b){
+    var dir=new THREE.Vector3().subVectors(b,a);
+    mesh.position.copy(a).add(b).multiplyScalar(0.5);
+    mesh.quaternion.setFromUnitVectors(UP,dir.clone().normalize());
+    return dir.length();
   }
+  // Clean STRAIGHT copper run between two nodes + inner water cylinder + brass coupling ring
+  function addPipeBetween(a,b){
+    var len=new THREE.Vector3().subVectors(b,a).length();
+    var pipe=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius,pipeRadius,len,28,1,true),copperMat.clone());
+    orient(pipe,a,b);pipe.castShadow=true;pipe.receiveShadow=true;pipeNetwork.add(pipe);
+    var water=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius*0.8,pipeRadius*0.8,len,24,1,false),makeWaterMat());
+    orient(water,a,b);pipeNetwork.add(water);
+    // coupling ring at mid-span (brass) for the finished-fitting look
+    var ring=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius*1.18,pipeRadius*1.18,0.45,28,1),brassMat);
+    orient(ring,a,b);ring.castShadow=true;pipeNetwork.add(ring);
+    pipeSegments.push({pipe:pipe,water:water,length:len});
+  }
+  // Elbow fitting at a corner: tidy brass sphere just larger than the pipe
   function addJoint(pos){
-    var s=new THREE.Mesh(new THREE.SphereGeometry(pipeRadius*1.25,18,14),jointMat.clone());
+    var s=new THREE.Mesh(new THREE.SphereGeometry(pipeRadius*1.12,22,16),jointMat.clone());
     s.position.copy(pos);s.castShadow=true;s.receiveShadow=true;
     pipeNetwork.add(s);return s;
   }
