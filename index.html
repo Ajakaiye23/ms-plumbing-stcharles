@@ -807,10 +807,10 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   scene.environment=makeEnv();
 
   // --- Materials (slightly < full metal + warm emissive so copper never goes black) ---
-  var copper=new THREE.MeshStandardMaterial({color:0xAE551F,metalness:0.78,roughness:0.32,envMapIntensity:1.5,emissive:0x2a1004,emissiveIntensity:0.3});
-  var copperWorn=new THREE.MeshStandardMaterial({color:0x8F4A24,metalness:0.74,roughness:0.48,envMapIntensity:1.25,emissive:0x230f06,emissiveIntensity:0.32});
-  var chrome=new THREE.MeshStandardMaterial({color:0xC6D0D9,metalness:0.9,roughness:0.16,envMapIntensity:1.7,emissive:0x121821,emissiveIntensity:0.34});
-  var brass=new THREE.MeshStandardMaterial({color:0xC09636,metalness:0.8,roughness:0.32,envMapIntensity:1.5,emissive:0x261b04,emissiveIntensity:0.34});
+  var copper=new THREE.MeshStandardMaterial({color:0xA85428,metalness:0.95,roughness:0.26,envMapIntensity:1.9,emissive:0x1d0c03,emissiveIntensity:0.14});
+  var copperWorn=new THREE.MeshStandardMaterial({color:0x8A4622,metalness:0.92,roughness:0.44,envMapIntensity:1.5,emissive:0x180a04,emissiveIntensity:0.16});
+  var chrome=new THREE.MeshStandardMaterial({color:0xC8D2DB,metalness:0.97,roughness:0.12,envMapIntensity:2.1,emissive:0x0c1117,emissiveIntensity:0.12});
+  var brass=new THREE.MeshStandardMaterial({color:0xC1962E,metalness:0.93,roughness:0.28,envMapIntensity:1.85,emissive:0x1c1403,emissiveIntensity:0.16});
   var pipeMats=[copper,copper,copperWorn,chrome];
 
   // --- Build one elbow pipe assembly: two runs meeting at a right angle, brass fittings ---
