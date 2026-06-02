@@ -958,12 +958,12 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   scene.add(pipeNetwork);
 
   var copperMat=new THREE.MeshStandardMaterial({
-    color:0xAE551F,metalness:0.78,roughness:0.32,envMapIntensity:1.5,
-    emissive:0x2a1004,emissiveIntensity:0.3
+    color:0xA85428,metalness:0.95,roughness:0.26,envMapIntensity:1.9,
+    emissive:0x1d0c03,emissiveIntensity:0.14
   });
   var jointMat=new THREE.MeshStandardMaterial({
-    color:0xC09636,metalness:0.8,roughness:0.32,envMapIntensity:1.5,
-    emissive:0x261b04,emissiveIntensity:0.34
+    color:0xC1962E,metalness:0.93,roughness:0.28,envMapIntensity:1.85,
+    emissive:0x1c1403,emissiveIntensity:0.16
   });
   var brassMat=jointMat;
 
@@ -1000,9 +1000,10 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     orient(ring,a,b);ring.castShadow=true;pipeNetwork.add(ring);
     pipeSegments.push({pipe:pipe,water:water,length:len});
   }
-  // Elbow fitting at a corner: tidy brass sphere just larger than the pipe
+  // Corner joint: a flush COPPER sphere (same radius as the pipe) so the corner reads
+  // as a smooth soldered bend, not a separate ball.
   function addJoint(pos){
-    var s=new THREE.Mesh(new THREE.SphereGeometry(pipeRadius*1.12,22,16),jointMat.clone());
+    var s=new THREE.Mesh(new THREE.SphereGeometry(pipeRadius*1.04,24,18),copperMat.clone());
     s.position.copy(pos);s.castShadow=true;s.receiveShadow=true;
     pipeNetwork.add(s);return s;
   }
@@ -1049,9 +1050,11 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xFF6B1A,size:0.13,transparent:true,opacity:0.55,sizeAttenuation:true}));
   scene.add(dust);
 
-  // Leak burst (a sphere that grows/fades for beat 3)
-  var leakBurst=new THREE.Mesh(new THREE.SphereGeometry(0.4,16,12),new THREE.MeshStandardMaterial({color:0x55BBEE,transparent:true,opacity:0,emissive:0x336699,emissiveIntensity:0.6}));
-  leakBurst.position.copy(nodes[3]);leakBurst.position.y+=2;scene.add(leakBurst);
+  // Leak burst sphere removed — it read as a random gray ball. Pressure is conveyed
+  // by the water rushing through the pipes instead. Kept as an invisible no-op so the
+  // existing render references stay valid.
+  var leakBurst=new THREE.Mesh(new THREE.SphereGeometry(0.1,8,6),new THREE.MeshBasicMaterial({transparent:true,opacity:0}));
+  leakBurst.visible=false;leakBurst.position.copy(nodes[3]);scene.add(leakBurst);
 
   // === ANIMATION STATE ===
   var state={
