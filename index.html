@@ -1067,7 +1067,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var sprayPts=new THREE.Points(sgeo,new THREE.PointsMaterial({map:dropTex,color:0xffffff,size:1.7,transparent:true,opacity:0,depthWrite:false,sizeAttenuation:true,fog:false,blending:THREE.NormalBlending}));
   sprayPts.frustumCulled=false;pipeNetwork.add(sprayPts);
   var curGap=0;
-  function resetDrop(i){var side=Math.random()<0.5?-1:1;var ex=BURST.x+side*(curGap*0.5);spos[i*3]=ex+(Math.random()-.5)*0.22;spos[i*3+1]=BURST.y+(Math.random()-.5)*0.28;spos[i*3+2]=BURST.z+(Math.random()-.5)*0.28;svel[i].set(side*(1.6+Math.random()*2.8),0.6+Math.random()*2.4,1.3+Math.random()*1.7);slife[i]=0.6+Math.random()*0.85;}
+  function resetDrop(i){var side=Math.random()<0.5?-1:1;var ex=BURST.x+side*(curGap*0.5);spos[i*3]=ex+(Math.random()-.5)*0.12;spos[i*3+1]=BURST.y-pipeRadius*0.6;spos[i*3+2]=BURST.z+0.05+(Math.random()-.5)*0.2;svel[i].set(-side*(0.4+Math.random()*1.0),-0.3-Math.random()*1.3,0.7+Math.random()*0.9);slife[i]=0.7+Math.random()*0.95;}
   // copper shrapnel
   var shrap=[];for(var fi=0;fi<7;fi++){var fr=new THREE.Mesh(new THREE.BoxGeometry(0.4+Math.random()*0.5,0.28,0.42),copperMat.clone());fr.position.copy(BURST);var a=Math.random()*Math.PI*2;fr.userData={dir:new THREE.Vector3(Math.cos(a),0.5+Math.random()*1.1,Math.sin(a)+0.6).normalize(),spin:new THREE.Vector3((Math.random()-.5)*9,(Math.random()-.5)*9,(Math.random()-.5)*9),dist:2.6+Math.random()*2.4};fr.castShadow=true;fr.visible=false;pipeNetwork.add(fr);shrap.push(fr);}
   // repair clamp (steel band + brass lips + through-bolts) wraps the horizontal pipe
@@ -1077,9 +1077,9 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var lip2=lip1.clone();lip2.position.x=-0.74;clamp.add(lip2);
   for(var bx=0;bx<2;bx++){var bolt=new THREE.Mesh(new THREE.CylinderGeometry(0.13,0.13,1.62,8),brassMat);bolt.position.set(bx?0.46:-0.46,0,0);clamp.add(bolt);}
   clamp.scale.setScalar(0.001);clamp.visible=false;pipeNetwork.add(clamp);
-  // jagged torn-metal rings at each broken end (attached to the ends, nothing floating)
-  function makeJag(dirSign){var g=new THREE.Group();for(var jj=0;jj<11;jj++){var ja=jj/11*Math.PI*2;var hgt=0.18+Math.random()*0.3;var tooth=new THREE.Mesh(new THREE.ConeGeometry(0.085,hgt,4),copperMat.clone());tooth.position.set(dirSign*hgt*0.35,Math.cos(ja)*pipeRadius*0.96,Math.sin(ja)*pipeRadius*0.96);tooth.rotation.z=-dirSign*Math.PI/2+(Math.random()-.5)*0.6;tooth.rotation.x=(Math.random()-.5)*0.6;tooth.castShadow=true;g.add(tooth);}g.visible=false;pipeNetwork.add(g);return g;}
-  var jagL=makeJag(1),jagR=makeJag(-1);
+  // TORN open ends: the pipe's own rim is jagged/notched (cut from the geometry, no added spikes)
+  function makeTornEnd(rz){var g=new THREE.CylinderGeometry(pipeRadius*1.01,pipeRadius*1.01,0.8,20,1,true);var ps=g.attributes.position;for(var v=0;v<ps.count;v++){if(ps.getY(v)>0.05){ps.setY(v,0.4-Math.random()*0.62);}}ps.needsUpdate=true;g.computeVertexNormals();var m=new THREE.Mesh(g,copperMat.clone());m.rotation.z=rz;m.castShadow=true;m.visible=false;pipeNetwork.add(m);return m;}
+  var tornL=makeTornEnd(-Math.PI/2),tornR=makeTornEnd(Math.PI/2);
   // cohesive WATER JET shooting up from the hole
   var jetMat=new THREE.MeshStandardMaterial({color:0x4fb0ef,transparent:true,opacity:0,roughness:0.1,metalness:0,emissive:0x2f7fb8,emissiveIntensity:0.9,depthWrite:false});
   var jet=new THREE.Mesh(new THREE.CylinderGeometry(0.52,0.12,4.0,18,1),jetMat);
@@ -1096,8 +1096,8 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   function setBreak(gap){curGap=gap;var half=gap*0.5;var brk=gap>0.12;
     var l1=BURST.x-half,lc=(BRK_L+l1)/2;stubL.position.set(lc,BURST.y,BURST.z);stubL.scale.y=Math.max(0.01,Math.abs(l1-BRK_L));
     var r0=BURST.x+half,rc=(r0+BRK_R)/2;stubR.position.set(rc,BURST.y,BURST.z);stubR.scale.y=Math.max(0.01,Math.abs(BRK_R-r0));
-    capL.position.set(BURST.x-half-0.03,BURST.y,BURST.z);capR.position.set(BURST.x+half+0.03,BURST.y,BURST.z);capL.visible=brk;capR.visible=brk;
-    jagL.position.set(BURST.x-half,BURST.y,BURST.z);jagR.position.set(BURST.x+half,BURST.y,BURST.z);jagL.visible=brk;jagR.visible=brk;}
+    capL.position.set(BURST.x-half-0.12,BURST.y,BURST.z);capR.position.set(BURST.x+half+0.12,BURST.y,BURST.z);capL.visible=brk;capR.visible=brk;
+    tornL.position.set(BURST.x-half-0.4,BURST.y,BURST.z);tornR.position.set(BURST.x+half+0.4,BURST.y,BURST.z);tornL.visible=brk;tornR.visible=brk;}
   setBreak(0);
 
 
@@ -1196,7 +1196,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     sprayPts.material.opacity=Math.min(0.82,state.spray*0.85);
     var emit=state.spray>0.05;
     for(var k=0;k<SPRAY;k++){
-      if(slife[k]>0){slife[k]-=dt;svel[k].y-=20*dt;spos[k*3]+=svel[k].x*dt;spos[k*3+1]+=svel[k].y*dt;spos[k*3+2]+=svel[k].z*dt;}
+      if(slife[k]>0){slife[k]-=dt;svel[k].y-=17*dt;spos[k*3]+=svel[k].x*dt;spos[k*3+1]+=svel[k].y*dt;spos[k*3+2]+=svel[k].z*dt;}
       else if(emit&&Math.random()<0.4*state.spray){resetDrop(k);}
       else{spos[k*3+1]=9999;}
     }
@@ -1204,7 +1204,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     // FIX: repair clamp slides on
     clamp.visible=state.fixT>0.02;clamp.scale.setScalar(Math.max(0.001,state.fixT));
     jet.visible=false;
-    setBreak(state.shrapT*1.7);burstSeg.water.visible=state.fixT>0.5;
+    setBreak(state.shrapT*1.25);burstSeg.water.visible=state.fixT>0.5;
 
     renderer.render(scene,camera);
   })();
