@@ -1062,7 +1062,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var SPRAY=210,spos=new Float32Array(SPRAY*3),svel=[],slife=new Float32Array(SPRAY);
   for(var si=0;si<SPRAY;si++){spos[si*3]=BURST.x;spos[si*3+1]=9999;spos[si*3+2]=BURST.z;svel.push(new THREE.Vector3());slife[si]=0;}
   var sgeo=new THREE.BufferGeometry();sgeo.setAttribute('position',new THREE.BufferAttribute(spos,3));
-  var sprayPts=new THREE.Points(sgeo,new THREE.PointsMaterial({color:0xa9dcff,size:2.0,transparent:true,opacity:0,depthWrite:false,sizeAttenuation:true,fog:false,blending:THREE.AdditiveBlending}));
+  var sprayPts=new THREE.Points(sgeo,new THREE.PointsMaterial({color:0x5bb4ee,size:1.5,transparent:true,opacity:0,depthWrite:false,sizeAttenuation:true,fog:false,blending:THREE.NormalBlending}));
   sprayPts.frustumCulled=false;pipeNetwork.add(sprayPts);
   function resetDrop(i){spos[i*3]=BURST.x+(Math.random()-.5)*0.5;spos[i*3+1]=BURST.y+0.3;spos[i*3+2]=BURST.z+(Math.random()-.5)*0.5;var ang=Math.random()*Math.PI*2,r=3+Math.random()*4;svel[i].set(Math.cos(ang)*r,5+Math.random()*8,Math.sin(ang)*r+2.5);slife[i]=0.5+Math.random()*0.75;}
   // copper shrapnel
@@ -1074,6 +1074,16 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var lip2=lip1.clone();lip2.position.x=-0.74;clamp.add(lip2);
   for(var bx=0;bx<2;bx++){var bolt=new THREE.Mesh(new THREE.CylinderGeometry(0.13,0.13,1.62,8),brassMat);bolt.position.set(bx?0.46:-0.46,0,0);clamp.add(bolt);}
   clamp.scale.setScalar(0.001);clamp.visible=false;pipeNetwork.add(clamp);
+  // rupture HOLE: dark torn opening + peeled copper petals on the burst pipe
+  var hole=new THREE.Group();hole.position.copy(BURST);
+  var holeDark=new THREE.Mesh(new THREE.SphereGeometry(0.46,16,12),new THREE.MeshStandardMaterial({color:0x04030a,roughness:1,metalness:0}));holeDark.scale.set(1,0.72,0.55);holeDark.position.set(0,0.16,0.22);hole.add(holeDark);
+  for(var pp=0;pp<6;pp++){var pa=pp/6*Math.PI*2;var petal=new THREE.Mesh(new THREE.ConeGeometry(0.15,0.62,4),copperMat.clone());petal.position.set(Math.cos(pa)*0.44,0.22+Math.sin(pa)*0.22,0.28);petal.rotation.set(Math.PI*0.5+Math.sin(pa)*0.5,pa,Math.cos(pa)*0.6);petal.castShadow=true;hole.add(petal);}
+  hole.visible=false;pipeNetwork.add(hole);
+  // cohesive WATER JET shooting up from the hole
+  var jetMat=new THREE.MeshStandardMaterial({color:0x4fb0ef,transparent:true,opacity:0,roughness:0.1,metalness:0,emissive:0x2f7fb8,emissiveIntensity:0.9,depthWrite:false});
+  var jet=new THREE.Mesh(new THREE.CylinderGeometry(0.52,0.12,4.0,18,1),jetMat);
+  jet.position.set(BURST.x,BURST.y+2.1,BURST.z+0.5);jet.rotation.x=-0.18;jet.visible=false;jet.frustumCulled=false;pipeNetwork.add(jet);
+
 
   // === ANIMATION STATE ===
   var state={
@@ -1176,6 +1186,8 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     sgeo.attributes.position.needsUpdate=true;
     // FIX: repair clamp slides on
     clamp.visible=state.fixT>0.02;clamp.scale.setScalar(Math.max(0.001,state.fixT));
+    hole.visible=state.shrapT>0.05&&state.fixT<0.45;
+    jet.visible=state.spray>0.04;jetMat.opacity=Math.min(0.85,state.spray*0.9);jet.scale.set(1+Math.sin(nt*9)*0.08,1+Math.sin(nt*13)*0.05,1+Math.cos(nt*9)*0.08);
 
     renderer.render(scene,camera);
   })();
