@@ -980,7 +980,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
 
   // Define a deliberate network: 4 vertical risers connected by 3 horizontal runs
   var pipeRadius=0.55;
-  var pipeSegments=[];
+  var pipeSegments=[];var couplingRings=[];
 
   var UP=new THREE.Vector3(0,1,0);
   function orient(mesh,a,b){
@@ -998,7 +998,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     orient(water,a,b);pipeNetwork.add(water);
     // coupling ring at mid-span (brass) for the finished-fitting look
     var ring=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius*1.18,pipeRadius*1.18,0.45,28,1),brassMat);
-    orient(ring,a,b);ring.castShadow=true;pipeNetwork.add(ring);
+    orient(ring,a,b);ring.castShadow=true;pipeNetwork.add(ring);couplingRings.push(ring);
     pipeSegments.push({pipe:pipe,water:water,length:len});
   }
   // Corner joint: a flush COPPER sphere (same radius as the pipe) so the corner reads
@@ -1062,7 +1062,8 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var SPRAY=210,spos=new Float32Array(SPRAY*3),svel=[],slife=new Float32Array(SPRAY);
   for(var si=0;si<SPRAY;si++){spos[si*3]=BURST.x;spos[si*3+1]=9999;spos[si*3+2]=BURST.z;svel.push(new THREE.Vector3());slife[si]=0;}
   var sgeo=new THREE.BufferGeometry();sgeo.setAttribute('position',new THREE.BufferAttribute(spos,3));
-  var sprayPts=new THREE.Points(sgeo,new THREE.PointsMaterial({color:0x5bb4ee,size:1.5,transparent:true,opacity:0,depthWrite:false,sizeAttenuation:true,fog:false,blending:THREE.NormalBlending}));
+  var dropTex=(function(){var dc=document.createElement('canvas');dc.width=dc.height=64;var dg=dc.getContext('2d');var rg=dg.createRadialGradient(32,32,0,32,32,32);rg.addColorStop(0,'rgba(228,244,255,1)');rg.addColorStop(0.35,'rgba(120,196,243,0.95)');rg.addColorStop(0.75,'rgba(74,156,228,0.5)');rg.addColorStop(1,'rgba(60,140,220,0)');dg.fillStyle=rg;dg.fillRect(0,0,64,64);return new THREE.CanvasTexture(dc);})();
+  var sprayPts=new THREE.Points(sgeo,new THREE.PointsMaterial({map:dropTex,color:0xffffff,size:1.7,transparent:true,opacity:0,depthWrite:false,sizeAttenuation:true,fog:false,blending:THREE.NormalBlending}));
   sprayPts.frustumCulled=false;pipeNetwork.add(sprayPts);
   function resetDrop(i){spos[i*3]=BURST.x+(Math.random()-.5)*0.5;spos[i*3+1]=BURST.y+0.3;spos[i*3+2]=BURST.z+(Math.random()-.5)*0.5;var ang=Math.random()*Math.PI*2,r=3+Math.random()*4;svel[i].set(Math.cos(ang)*r,5+Math.random()*8,Math.sin(ang)*r+2.5);slife[i]=0.5+Math.random()*0.75;}
   // copper shrapnel
@@ -1083,6 +1084,22 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var jetMat=new THREE.MeshStandardMaterial({color:0x4fb0ef,transparent:true,opacity:0,roughness:0.1,metalness:0,emissive:0x2f7fb8,emissiveIntensity:0.9,depthWrite:false});
   var jet=new THREE.Mesh(new THREE.CylinderGeometry(0.52,0.12,4.0,18,1),jetMat);
   jet.position.set(BURST.x,BURST.y+2.1,BURST.z+0.5);jet.rotation.x=-0.18;jet.visible=false;jet.frustumCulled=false;pipeNetwork.add(jet);
+  // === PIPE ACTUALLY BREAKS: two copper stubs + a growing gap replace the burst segment ===
+  var burstSeg=pipeSegments[3];burstSeg.pipe.visible=false;burstSeg.water.visible=false;
+  if(couplingRings[3])couplingRings[3].visible=false;
+  var stubL=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius,pipeRadius,1,24,1,true),copperMat);stubL.rotation.z=Math.PI/2;stubL.castShadow=true;pipeNetwork.add(stubL);
+  var stubR=new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius,pipeRadius,1,24,1,true),copperMat);stubR.rotation.z=Math.PI/2;stubR.castShadow=true;pipeNetwork.add(stubR);
+  var brkCapMat=new THREE.MeshStandardMaterial({color:0x0a0705,roughness:1,metalness:0.3,side:THREE.DoubleSide});
+  var capL=new THREE.Mesh(new THREE.CircleGeometry(pipeRadius*0.94,20),brkCapMat);capL.rotation.y=Math.PI/2;pipeNetwork.add(capL);
+  var capR=new THREE.Mesh(new THREE.CircleGeometry(pipeRadius*0.94,20),brkCapMat);capR.rotation.y=Math.PI/2;pipeNetwork.add(capR);
+  var BRK_L=-5,BRK_R=5;
+  function setBreak(gap){var half=gap*0.5;
+    var l1=BURST.x-half,lc=(BRK_L+l1)/2;stubL.position.set(lc,BURST.y,BURST.z);stubL.scale.y=Math.max(0.01,Math.abs(l1-BRK_L));
+    var r0=BURST.x+half,rc=(r0+BRK_R)/2;stubR.position.set(rc,BURST.y,BURST.z);stubR.scale.y=Math.max(0.01,Math.abs(BRK_R-r0));
+    capL.position.set(BURST.x-half,BURST.y,BURST.z);capR.position.set(BURST.x+half,BURST.y,BURST.z);
+    var brk=gap>0.12;capL.visible=brk;capR.visible=brk;}
+  setBreak(0);
+
 
 
   // === ANIMATION STATE ===
@@ -1188,6 +1205,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
     clamp.visible=state.fixT>0.02;clamp.scale.setScalar(Math.max(0.001,state.fixT));
     hole.visible=state.shrapT>0.05&&state.fixT<0.45;
     jet.visible=state.spray>0.04;jetMat.opacity=Math.min(0.85,state.spray*0.9);jet.scale.set(1+Math.sin(nt*9)*0.08,1+Math.sin(nt*13)*0.05,1+Math.cos(nt*9)*0.08);
+    setBreak(state.shrapT*1.7);burstSeg.water.visible=state.fixT>0.5;
 
     renderer.render(scene,camera);
   })();
