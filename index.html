@@ -1093,10 +1093,10 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function
   var capL=new THREE.Mesh(new THREE.CircleGeometry(pipeRadius*0.94,20),brkCapMat);capL.rotation.y=Math.PI/2;pipeNetwork.add(capL);
   var capR=new THREE.Mesh(new THREE.CircleGeometry(pipeRadius*0.94,20),brkCapMat);capR.rotation.y=Math.PI/2;pipeNetwork.add(capR);
   var BRK_L=-5,BRK_R=5;
-  function setBreak(gap){curGap=gap;var half=gap*0.5;var brk=gap>0.12;
-    var l1=BURST.x-half,lc=(BRK_L+l1)/2;stubL.position.set(lc,BURST.y,BURST.z);stubL.scale.y=Math.max(0.01,Math.abs(l1-BRK_L));
-    var r0=BURST.x+half,rc=(r0+BRK_R)/2;stubR.position.set(rc,BURST.y,BURST.z);stubR.scale.y=Math.max(0.01,Math.abs(BRK_R-r0));
-    capL.position.set(BURST.x-half-0.12,BURST.y,BURST.z);capR.position.set(BURST.x+half+0.12,BURST.y,BURST.z);capL.visible=brk;capR.visible=brk;
+  function setBreak(gap){curGap=gap;var half=gap*0.5;var brk=gap>0.12;var inset=Math.min(0.52,gap*0.52);
+    var l1=BURST.x-half-inset,lc=(BRK_L+l1)/2;stubL.position.set(lc,BURST.y,BURST.z);stubL.scale.y=Math.max(0.01,Math.abs(l1-BRK_L));
+    var r0=BURST.x+half+inset,rc=(r0+BRK_R)/2;stubR.position.set(rc,BURST.y,BURST.z);stubR.scale.y=Math.max(0.01,Math.abs(BRK_R-r0));
+    capL.position.set(BURST.x-half-0.2,BURST.y,BURST.z);capR.position.set(BURST.x+half+0.2,BURST.y,BURST.z);capL.visible=brk;capR.visible=brk;
     tornL.position.set(BURST.x-half-0.4,BURST.y,BURST.z);tornR.position.set(BURST.x+half+0.4,BURST.y,BURST.z);tornL.visible=brk;tornR.visible=brk;}
   setBreak(0);
 
